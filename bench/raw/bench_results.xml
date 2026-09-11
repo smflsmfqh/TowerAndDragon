@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-06 11:53:52Z" end-time="2026-09-06 11:53:58Z" duration="6.0416023">
+  <test-suite type="TestSuite" id="1000" name="TowerAndDragon" fullname="TowerAndDragon" runstate="Runnable" testcasecount="355" result="Passed" start-time="2026-09-06 11:53:52Z" end-time="2026-09-06 11:53:58Z" duration="6.041602" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1426" name="Assembly-CSharp-Editor.dll" fullname="/Users/ihaneul/unityProject/TowerAndDragon/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="355" result="Passed" start-time="2026-09-06 11:53:52Z" end-time="2026-09-06 11:53:58Z" duration="6.028028" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="39679" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="1044" name="ConquestHighlightBenchmark" fullname="ConquestHighlightBenchmark" classname="ConquestHighlightBenchmark" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-06 11:53:52Z" end-time="2026-09-06 11:53:58Z" duration="6.019855" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1046" name="Benchmark_FullClassificationScan" fullname="ConquestHighlightBenchmark.Benchmark_FullClassificationScan" methodname="Benchmark_FullClassificationScan" classname="ConquestHighlightBenchmark" runstate="Runnable" seed="1280169254" result="Passed" start-time="2026-09-06 11:53:52Z" end-time="2026-09-06 11:53:53Z" duration="1.055951" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[BENCH] 전체 청크 분류·틴트 스캔 1회 (청크 41개 · 셀 4705개): 0.4556 ms/회 · 매 프레임(60fps) 실행 시 27.33 ms/초 (프레임 예산 16.67ms 대비 2.73%)
+]]></output>
+        </test-case>
+        <test-case id="1049" name="Benchmark_RecomputeCostByChunkCount" fullname="ConquestHighlightBenchmark.Benchmark_RecomputeCostByChunkCount" methodname="Benchmark_RecomputeCostByChunkCount" classname="ConquestHighlightBenchmark" runstate="Runnable" seed="1455879318" result="Passed" start-time="2026-09-06 11:53:53Z" end-time="2026-09-06 11:53:54Z" duration="0.249016" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[BENCH] 재계산 1회 · 판정 대상 청크 1개(셀 75개): 0.020 ms (60fps 프레임 예산 대비 0.1%)
+[BENCH] 재계산 1회 · 판정 대상 청크 4개(셀 304개): 0.068 ms (60fps 프레임 예산 대비 0.4%)
+[BENCH] 재계산 1회 · 판정 대상 청크 8개(셀 639개): 0.162 ms (60fps 프레임 예산 대비 1.0%)
+[BENCH] 재계산 1회 · 판정 대상 청크 16개(셀 1433개): 0.385 ms (60fps 프레임 예산 대비 2.3%)
+[BENCH] 재계산 1회 · 판정 대상 청크 24개(셀 2327개): 0.628 ms (60fps 프레임 예산 대비 3.8%)
+[BENCH] 재계산 1회 · 판정 대상 청크 32개(셀 3306개): 0.835 ms (60fps 프레임 예산 대비 5.0%)
+[BENCH] 재계산 1회 · 판정 대상 청크 41개(셀 4705개): 1.209 ms (60fps 프레임 예산 대비 7.3%)
+]]></output>
+        </test-case>
+        <test-case id="1045" name="Benchmark_SingleChunkHighlightRebuild" fullname="ConquestHighlightBenchmark.Benchmark_SingleChunkHighlightRebuild" methodname="Benchmark_SingleChunkHighlightRebuild" classname="ConquestHighlightBenchmark" runstate="Runnable" seed="1668413244" result="Passed" start-time="2026-09-06 11:53:54Z" end-time="2026-09-06 11:53:54Z" duration="0.528706" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[BENCH] 청크 수=41 최소셀=75 중앙값셀=113 최대셀=163
+[BENCH] 하이라이트 재구성 1회 · 최소 청크(셀 75개): 0.0533 ms/회 · 60fps 매 프레임 환산 3.20 ms/초 (프레임 예산 16.67ms 대비 0.32%) · 관리힙 증가 0 B/회
+[BENCH] 하이라이트 재구성 1회 · 중앙값 청크(셀 113개): 0.0788 ms/회 · 60fps 매 프레임 환산 4.73 ms/초 (프레임 예산 16.67ms 대비 0.47%) · 관리힙 증가 0 B/회
+[BENCH] 하이라이트 재구성 1회 · 최대 청크(셀 163개): 0.1025 ms/회 · 60fps 매 프레임 환산 6.15 ms/초 (프레임 예산 16.67ms 대비 0.61%) · 관리힙 증가 0 B/회
+]]></output>
+        </test-case>
+        <test-case id="1048" name="Benchmark_TilemapSetColorForAllCells" fullname="ConquestHighlightBenchmark.Benchmark_TilemapSetColorForAllCells" methodname="Benchmark_TilemapSetColorForAllCells" classname="ConquestHighlightBenchmark" runstate="Runnable" seed="1615731302" result="Passed" start-time="2026-09-06 11:53:54Z" end-time="2026-09-06 11:53:54Z" duration="0.123408" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[BENCH] 지형 틴트 재도색 1회 (Tilemap.SetColor × 4705셀): 1.788 ms/회 · 매 프레임(60fps) 실행 시 107.3 ms/초 (프레임 예산 16.67ms 대비 10.7%)
+]]></output>
+        </test-case>
+        <test-case id="1050" name="Measure_ChunkChangeRateAlongSweep" fullname="ConquestHighlightBenchmark.Measure_ChunkChangeRateAlongSweep" methodname="Measure_ChunkChangeRateAlongSweep" classname="ConquestHighlightBenchmark" runstate="Runnable" seed="1948206600" result="Passed" start-time="2026-09-06 11:53:54Z" end-time="2026-09-06 11:53:54Z" duration="0.003924" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[BENCH] 가로 스윕: 셀 이동 4705회 중 청크 변경 453회 (셀 10.4칸당 1회 재계산)
+]]></output>
+        </test-case>
+        <test-case id="1047" name="Measure_PerFrameGarbageOfCoordList" fullname="ConquestHighlightBenchmark.Measure_PerFrameGarbageOfCoordList" methodname="Measure_PerFrameGarbageOfCoordList" classname="ConquestHighlightBenchmark" runstate="Runnable" seed="1788337709" result="Passed" start-time="2026-09-06 11:53:54Z" end-time="2026-09-06 11:53:58Z" duration="4.039748" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[BENCH] 좌표 리스트 1개(셀 75개) = 1272 B · 매 프레임 생성 시 60fps 기준 74.5 KB/초 가비지
+[BENCH] 좌표 리스트 1개(셀 113개) = 1965 B · 매 프레임 생성 시 60fps 기준 115.1 KB/초 가비지
+[BENCH] 좌표 리스트 1개(셀 163개) = 1966 B · 매 프레임 생성 시 60fps 기준 115.2 KB/초 가비지
+Saving results to: /Users/ihaneul/Library/Application Support/DefaultCompany/TowerAndDragon/TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
