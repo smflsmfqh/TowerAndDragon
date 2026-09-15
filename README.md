@@ -76,11 +76,11 @@
 - 인구 코스트 연동, 접경하지 않은 청크 선택 방지, 자투리 점령지 정리와 하이라이트 방식 통일
 - 점령 UI ↔ 기능 연결
 
-### 4. 자원 노드 시스템 — [`Assets/Scripts/ResourceNode`](Assets/Scripts/ResourceNode)
+### 4. 자원 노드 시스템 — [`CellYieldOverrideTable`](Assets/Scripts/ResourceNode/CellYieldOverrideTable.cs) · [`ChunkYieldTable`](Assets/Scripts/ResourceNode/ChunkYieldTable.cs) · [`ResourceNodeAreaTable`](Assets/Scripts/ResourceNode/ResourceNodeAreaTable.cs) · [`ResourceProductionData`](Assets/Scripts/ResourceNode/ResourceProductionData.cs) ([`Assets/Scripts/ResourceNode`](Assets/Scripts/ResourceNode))
 
-- 셀 단위 자원별 생산량 저장([`CellYieldOverrideTable`](Assets/Scripts/ResourceNode/CellYieldOverrideTable.cs), [`ChunkYieldTable`](Assets/Scripts/ResourceNode/ChunkYieldTable.cs))과 노드 데이터 생성 툴·디버거
+- 셀 단위 자원별 생산량 저장 방식([`CellYieldOverrideTable`](Assets/Scripts/ResourceNode/CellYieldOverrideTable.cs), [`ChunkYieldTable`](Assets/Scripts/ResourceNode/ChunkYieldTable.cs))과 노드 영역 테이블([`ResourceNodeAreaTable`](Assets/Scripts/ResourceNode/ResourceNodeAreaTable.cs)), 생산시설 데이터 SO([`ResourceProductionData`](Assets/Scripts/ResourceNode/ResourceProductionData.cs))
+- 노드 데이터 생성 에디터 툴([`ResourceYieldEditorWindow`](Assets/Scripts/ResourceNode/Editor/ResourceYieldEditorWindow.cs))과 자원 노드 디버거
 - 노드 위 생산시설 건설 → 인구 배치 → 생산 → 회수 흐름 연결
-- [`PlacementYieldEstimator`](Assets/Scripts/ResourceNode/PlacementYieldEstimator.cs) — "이 자리에 지으면 하루에 얼마가 나오는가" 미리보기. 실제 정산과 **같은 함수**를 호출해 미리보기 숫자와 다음 아침의 실제 지급량이 갈라지지 않게 했습니다.
 
 ### 5. 봉인석 · 엔딩
 
@@ -119,7 +119,7 @@
 팀 규칙([`CLAUDE.md`](CLAUDE.md))에 따라 지킨 것들입니다.
 
 - **데이터 기반 설계** — 튜토리얼 단계, 점령 비용·기간, 자원 노드 생산량, 공격 이펙트를 전부 ScriptableObject/CSV로 두어 코드 수정 없이 조정
-- **판정은 한 곳에서** — 건설 가능 판정, 생산량 산식처럼 "안내"와 "실제 결과"가 같은 함수를 부르게 해 어긋남을 구조적으로 차단
+- **판정은 한 곳에서** — 건설 불가 사유 안내처럼 "안내"와 "실제 판정"이 같은 함수를 거치게 해 어긋남을 구조적으로 차단
 - **이벤트 초기화 순서** — 구독은 `Awake`/`OnEnable`, 첫 발화는 `Start` 이후. 다른 오브젝트의 `Start` 순서에 의존하는 초기화는 한 프레임 지연을 명시
 - **UniTask** — 코루틴 대신 UniTask, 파괴 시 자동 취소 토큰 전달
 - **문자열·매직 넘버 금지** — 언어별 문자열은 스트링테이블 키, 상수는 이름 있는 `const`
