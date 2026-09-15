@@ -126,7 +126,7 @@
 
 ## 기술 스택
 
-Unity 6000.3.15f1 · URP 17.3 · Input System · Cinemachine 3 · UniTask · DOTween · NavMeshPlus · Newtonsoft.Json
+Unity 6000.3.15f1 · URP 17.3 · Input System · UniTask · DOTween · NavMeshPlus · Newtonsoft.Json
 
 ## 실행
 
