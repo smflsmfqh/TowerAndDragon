@@ -84,10 +84,12 @@
 
 - 포탈 옆 봉인석 설치 위치 판정([`ISealStonePlacementQuery`](Assets/Scripts/Grid/ISealStonePlacementQuery.cs))과 비용, 4포탈 봉인 엔딩 기초 구현
 
-### 6. 새끼용 배치 · 가이드 UI — [`Assets/Scripts/Guide`](Assets/Scripts/Guide), [`Assets/Scripts/Buildings/BabyDragon`](Assets/Scripts/Buildings/BabyDragon)
+### 6. 새끼용 시스템 · 새끼용 가이드 — [`BabyDragonPlacementCoordinator`](Assets/Scripts/Buildings/BabyDragon/BabyDragonPlacementCoordinator.cs) · [`DragonEggInventorySystem`](Assets/Scripts/Buildings/BabyDragon/DragonEggInventorySystem.cs) · [`BabyDragonGuideController`](Assets/Scripts/Buildings/BabyDragon/BabyDragonGuideController.cs) · [`BabyDragonTooltipBuilder`](Assets/Scripts/Buildings/BabyDragon/BabyDragonTooltipBuilder.cs) ([`Assets/Scripts/Buildings/BabyDragon`](Assets/Scripts/Buildings/BabyDragon))
 
-- 새끼용 설치·이동, 생산/공격 버프 모드 전환, 새끼용 인벤토리
-- 가이드 퀘스트 시스템([`GuideQuestSO`](Assets/Scripts/Guide/GuideQuestSO.cs)/[`GuideQuestController`](Assets/Scripts/Guide/GuideQuestController.cs)) — 알 획득·부화 알림, 툴팁, 토스트 스택 구조
+- 새끼용 설치·이동과 생산/공격 버프 모드 전환, 슬라임 먹이 시스템 초기 구현([`BabyDragonPlacementCoordinator`](Assets/Scripts/Buildings/BabyDragon/BabyDragonPlacementCoordinator.cs), [`BabyDragonFeedingSystem`](Assets/Scripts/Buildings/BabyDragon/BabyDragonFeedingSystem.cs), [`BabyDragonBuffSystem`](Assets/Scripts/Buildings/BabyDragon/BabyDragonBuffSystem.cs) 초기 버전)
+- 알 인벤토리와 인벤토리 창([`DragonEggInventorySystem`](Assets/Scripts/Buildings/BabyDragon/DragonEggInventorySystem.cs), [`UI_DragonInventoryWindow`](Assets/Scripts/UI/UI_DragonInventoryWindow.cs))
+- **새끼용 가이드** — 첫 새끼용을 얻은 플레이어를 획득 → 인벤토리 → 부화 → 배치 → 모드 전환까지 이끄는 단계형 안내([`BabyDragonGuideController`](Assets/Scripts/Buildings/BabyDragon/BabyDragonGuideController.cs)/[`BabyDragonGuideStep`](Assets/Scripts/Buildings/BabyDragon/BabyDragonGuideStep.cs)). 이 경험이 뒤의 데이터 기반 튜토리얼 설계로 이어졌습니다.
+- 새끼용 툴팁([`BabyDragonTooltipBuilder`](Assets/Scripts/Buildings/BabyDragon/BabyDragonTooltipBuilder.cs)), 버프 범위 표시([`BabyDragonRangeVfxDisplay`](Assets/Scripts/Buildings/BabyDragon/BabyDragonRangeVfxDisplay.cs)), 알 획득·부화 토스트 알림과 토스트 스택 구조([`UI_ConfirmNotificationToast`](Assets/Scripts/UI/UI_ConfirmNotificationToast.cs), 공동 작업), 튜토리얼 씬 인계([`BabyDragonTutorialHandOff`](Assets/Scripts/Buildings/BabyDragon/BabyDragonTutorialHandOff.cs))
 
 ### 7. 튜토리얼 — [`Assets/Scripts/Tutorial`](Assets/Scripts/Tutorial), [`Assets/Data/Tutorial`](Assets/Data/Tutorial)
 
@@ -95,7 +97,6 @@
 
 - **1일차 — 강제 시퀀스** [`TutorialRunner`](Assets/Scripts/Tutorial/TutorialRunner.cs): 순서 진행과 완료 조건 감시만 담당하고 표시는 오버레이에 맡깁니다. 도는 동안 아직 설명하지 않은 창·단축키·HUD를 질의 인터페이스([`IExclusiveModeOpenQuery`](Assets/Scripts/UI/IExclusiveModeOpenQuery.cs), [`IDayEndBlockQuery`](Assets/Scripts/Managers/IDayEndBlockQuery.cs), [`IShortcutBlockQuery`](Assets/Scripts/UI/IShortcutBlockQuery.cs) 등)로 막습니다.
 - **2일차 이후 — 자유 목표** [`TutorialObjectiveController`](Assets/Scripts/Tutorial/TutorialObjectiveController.cs): 순서를 강제하지 않고 여러 목표를 동시에 추적합니다. 1일차부터 켜 두어 안내보다 먼저 해 버린 행동도 놓치지 않으며, 완료 판정은 이벤트로만 합니다.
-- 설계안에 있던 `TutorialDirector`는 **만들지 않기로** 판단했습니다 — 챕터 목록을 줄이면 기존 컨트롤러가 자연히 멈추고, 관문 해제는 러너의 `OnDisable`이 이미 처리하고 있었기 때문입니다 ([`Docs/튜토리얼_재구성_구조_검토.md`](Docs/튜토리얼_재구성_구조_검토.md) §4)
 - 튜토리얼 진입점, 본게임 씬 전환 로딩·인계([`TutorialToGameHandoff`](Assets/Scripts/Tutorial/TutorialToGameHandoff.cs)), 엔딩 컷씬 시퀀서
 
 ### 8. 타워 · 몬스터 전투 이펙트와 효과음 — [`ProjectileVisual`](Assets/Scripts/Combat/ProjectileVisual.cs) · [`ProjectilePool`](Assets/Scripts/Combat/ProjectilePool.cs) · [`ProjectileImpactPlacement`](Assets/Scripts/Combat/ProjectileImpactPlacement.cs) · [`AttackVfxAnchor`](Assets/Scripts/Combat/AttackVfxAnchor.cs) · [`MonsterStatusVfx`](Assets/Scripts/Combat/Status/MonsterStatusVfx.cs) ([`Assets/Scripts/Combat`](Assets/Scripts/Combat))
