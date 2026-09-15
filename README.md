@@ -54,63 +54,63 @@
 추가로 담당했습니다. 프로토타입 초기에 그리드와 건설의 기반을 세운 뒤 그 위에 점령·자원 노드·봉인석을 얹었고,
 알파부터는 그 시스템들을 플레이어에게 가르치는 쪽(가이드·튜토리얼)으로 옮겨 갔습니다.
 
-### 1. 그리드 · 청크 시스템 — `GridMap` · `GridCell` · `Chunk` · `TerrainTileMap` (`Assets/Scripts/Grid`)
+### 1. 그리드 · 청크 시스템 — [`GridMap`](Assets/Scripts/Grid/GridMap.cs) · [`GridCell`](Assets/Scripts/Grid/GridCell.cs) · [`Chunk`](Assets/Scripts/Grid/Chunk.cs) · [`TerrainTileMap`](Assets/Scripts/Grid/TerrainTileMap.cs) ([`Assets/Scripts/Grid`](Assets/Scripts/Grid))
 
-타일맵 위에 셀 단위 데이터(`GridCell`)와 청크 단위 상태(`Chunk`)를 얹은 2계층 그리드. 건설·점령·자원·안개·몬스터 경로가 전부 이 위에서 동작합니다.
+타일맵 위에 셀 단위 데이터([`GridCell`](Assets/Scripts/Grid/GridCell.cs))와 청크 단위 상태([`Chunk`](Assets/Scripts/Grid/Chunk.cs))를 얹은 2계층 그리드. 건설·점령·자원·안개·몬스터 경로가 전부 이 위에서 동작합니다.
 
-- `GridMap` — 성 중심 좌표계, 셀 ↔ 청크 매핑, 풋프린트 단위 건설 가능 판정(`CanConstructBuildingFootprint`)
-- 초기 청크 분할과 성 중심 좌표 계산 — 프로토타입 시점의 9×9 정사각형 청크 기획을 구현하고, 맵 전체의 청크 분할을 확인하는 `ChunkDebugger`를 만들었습니다 (이후 자유 형태 청크로의 전환은 다른 팀원 작업)
-- 지형 타일맵(`TerrainTileMap`/`TerrainType`), 마우스 타일 선택, 원정 마커 렌더러(`ExpeditionMarkerRenderer`)
-- 세이브 복원 전용 배치 경로 — 복원 시 배치 판정을 **다시 묻지 않는** 이유가 `GridMap.cs`의 `RestoreBuilding` 주석에 기록돼 있습니다 (얼음 새끼용 버프로 풀린 용암 지대가 복원 순서 때문에 건물을 조용히 지우던 문제)
+- [`GridMap`](Assets/Scripts/Grid/GridMap.cs) — 성 중심 좌표계, 셀 ↔ 청크 매핑, 풋프린트 단위 건설 가능 판정(`CanConstructBuildingFootprint`)
+- 초기 청크 분할과 성 중심 좌표 계산 — 프로토타입 시점의 9×9 정사각형 청크 기획을 구현하고, 맵 전체의 청크 분할을 확인하는 [`ChunkDebugger`](Assets/Scripts/ChunkDebugger.cs)를 만들었습니다 (이후 자유 형태 청크로의 전환은 다른 팀원 작업)
+- 지형 타일맵([`TerrainTileMap`](Assets/Scripts/Grid/TerrainTileMap.cs)/[`TerrainType`](Assets/Scripts/Grid/TerrainType.cs)), 마우스 타일 선택, 원정 마커 렌더러([`ExpeditionMarkerRenderer`](Assets/Scripts/Grid/ExpeditionMarkerRenderer.cs))
+- 세이브 복원 전용 배치 경로 — 복원 시 배치 판정을 **다시 묻지 않는** 이유가 [`GridMap.RestoreBuilding`](Assets/Scripts/Grid/GridMap.cs#L1007) 주석에 기록돼 있습니다 (얼음 새끼용 버프로 풀린 용암 지대가 복원 순서 때문에 건물을 조용히 지우던 문제)
 
-### 2. 건물 배치 시스템 — `Assets/Scripts/Grid/BuildingPlacementController.cs`, `Assets/Scripts/Buildings`
+### 2. 건물 배치 시스템 — [`BuildingPlacementController.cs`](Assets/Scripts/Grid/BuildingPlacementController.cs), [`Assets/Scripts/Buildings`](Assets/Scripts/Buildings)
 
-- 셀 사이즈·풋프린트(`FootprintShape`) 기반 배치, 고스트 프리뷰, `R` 회전, 이동·철거(비용 회수)
+- 셀 사이즈·풋프린트([`FootprintShape`](Assets/Scripts/Buildings/FootprintShape.cs)) 기반 배치, 고스트 프리뷰, `R` 회전, 이동·철거(비용 회수)
 - 건설 비용을 빌딩 데이터에 귀속시키는 리팩터링
-- **건설 불가 사유 안내** — `PlacementBlockReason`은 가능/불가 판정을 두 번 구현하지 않고, 이미 실패한 배치에 "왜"만 되묻는 진단용 enum입니다. 값의 순서가 곧 안내 우선순위이며, 사유는 경고창 하나로 전달합니다.
-- 선택 상태 변경 이벤트를 **인자 없이** 발화하는 설계 — 구독자가 캐시 대신 매번 현재 상태를 읽게 해, 다섯 갈래로 갈리는 판정과 캐시가 어긋나 알림이 조용히 멈추는 일을 막았습니다 (`BuildingPlacementController.cs` 이벤트 주석)
+- **건설 불가 사유 안내** — [`PlacementBlockReason`](Assets/Scripts/Grid/PlacementBlockReason.cs)은 가능/불가 판정을 두 번 구현하지 않고, 이미 실패한 배치에 "왜"만 되묻는 진단용 enum입니다. 값의 순서가 곧 안내 우선순위이며, 사유는 경고창 하나로 전달합니다.
+- 선택 상태 변경 이벤트를 **인자 없이** 발화하는 설계 — 구독자가 캐시 대신 매번 현재 상태를 읽게 해, 다섯 갈래로 갈리는 판정과 캐시가 어긋나 알림이 조용히 멈추는 일을 막았습니다 ([`BuildingPlacementController.InteractionStateChanged`](Assets/Scripts/Grid/BuildingPlacementController.cs#L118) 주석)
 
-### 3. 점령 시스템 — `Assets/Scripts/Conquest`
+### 3. 점령 시스템 — [`Assets/Scripts/Conquest`](Assets/Scripts/Conquest)
 
-- 점령 모드 컨트롤러(`ConquestModeController`, 배타 모드 인터페이스 구현), 원정 상태(`ConquestExpedition`), 청크별 점령 비용 테이블(`ConquestChunkCostTable`)
+- 점령 모드 컨트롤러([`ConquestModeController`](Assets/Scripts/Conquest/ConquestModeController.cs), 배타 모드 인터페이스 구현), 원정 상태([`ConquestExpedition`](Assets/Scripts/Conquest/ConquestExpedition.cs)), 청크별 점령 비용 테이블([`ConquestChunkCostTable`](Assets/Scripts/Conquest/ConquestChunkCostTable.cs))
 - 인구 코스트 연동, 접경하지 않은 청크 선택 방지, 자투리 점령지 정리와 하이라이트 방식 통일
 - 점령 UI ↔ 기능 연결
 
-### 4. 자원 노드 시스템 — `Assets/Scripts/ResourceNode`
+### 4. 자원 노드 시스템 — [`Assets/Scripts/ResourceNode`](Assets/Scripts/ResourceNode)
 
-- 셀 단위 자원별 생산량 저장(`CellYieldOverrideTable`, `ChunkYieldTable`)과 노드 데이터 생성 툴·디버거
+- 셀 단위 자원별 생산량 저장([`CellYieldOverrideTable`](Assets/Scripts/ResourceNode/CellYieldOverrideTable.cs), [`ChunkYieldTable`](Assets/Scripts/ResourceNode/ChunkYieldTable.cs))과 노드 데이터 생성 툴·디버거
 - 노드 위 생산시설 건설 → 인구 배치 → 생산 → 회수 흐름 연결
-- `PlacementYieldEstimator` — "이 자리에 지으면 하루에 얼마가 나오는가" 미리보기. 실제 정산과 **같은 함수**를 호출해 미리보기 숫자와 다음 아침의 실제 지급량이 갈라지지 않게 했습니다.
+- [`PlacementYieldEstimator`](Assets/Scripts/ResourceNode/PlacementYieldEstimator.cs) — "이 자리에 지으면 하루에 얼마가 나오는가" 미리보기. 실제 정산과 **같은 함수**를 호출해 미리보기 숫자와 다음 아침의 실제 지급량이 갈라지지 않게 했습니다.
 
 ### 5. 봉인석 · 엔딩
 
-- 포탈 옆 봉인석 설치 위치 판정(`ISealStonePlacementQuery`)과 비용, 4포탈 봉인 엔딩 기초 구현
+- 포탈 옆 봉인석 설치 위치 판정([`ISealStonePlacementQuery`](Assets/Scripts/Grid/ISealStonePlacementQuery.cs))과 비용, 4포탈 봉인 엔딩 기초 구현
 
-### 6. 새끼용 배치 · 가이드 UI — `Assets/Scripts/Guide`, `Assets/Scripts/Buildings/BabyDragon`
+### 6. 새끼용 배치 · 가이드 UI — [`Assets/Scripts/Guide`](Assets/Scripts/Guide), [`Assets/Scripts/Buildings/BabyDragon`](Assets/Scripts/Buildings/BabyDragon)
 
 - 새끼용 설치·이동, 생산/공격 버프 모드 전환, 새끼용 인벤토리
-- 가이드 퀘스트 시스템(`GuideQuestSO`/`GuideQuestController`) — 알 획득·부화 알림, 툴팁, 토스트 스택 구조
+- 가이드 퀘스트 시스템([`GuideQuestSO`](Assets/Scripts/Guide/GuideQuestSO.cs)/[`GuideQuestController`](Assets/Scripts/Guide/GuideQuestController.cs)) — 알 획득·부화 알림, 툴팁, 토스트 스택 구조
 
-### 7. 튜토리얼 — `Assets/Scripts/Tutorial`, `Assets/Data/Tutorial`
+### 7. 튜토리얼 — [`Assets/Scripts/Tutorial`](Assets/Scripts/Tutorial), [`Assets/Data/Tutorial`](Assets/Data/Tutorial)
 
-**데이터 기반 튜토리얼.** 단계 하나가 `TutorialStepSO`(문구·대상·완료 조건), 챕터가 `TutorialSequenceSO`로, 순서와 문구는 코드 수정 없이 에셋에서 바꿉니다. 초기 구현 후 플레이테스트에서 "긴 시간 동안 정해진 순서 외의 행동을 못 한다"는 문제가 드러나 구조를 재설계했습니다.
+**데이터 기반 튜토리얼.** 단계 하나가 [`TutorialStepSO`](Assets/Scripts/Tutorial/TutorialStepSO.cs)(문구·대상·완료 조건), 챕터가 [`TutorialSequenceSO`](Assets/Scripts/Tutorial/TutorialSequenceSO.cs)로, 순서와 문구는 코드 수정 없이 에셋에서 바꿉니다. 초기 구현 후 플레이테스트에서 "긴 시간 동안 정해진 순서 외의 행동을 못 한다"는 문제가 드러나 구조를 재설계했습니다.
 
-- **1일차 — 강제 시퀀스** `TutorialRunner`: 순서 진행과 완료 조건 감시만 담당하고 표시는 오버레이에 맡깁니다. 도는 동안 아직 설명하지 않은 창·단축키·HUD를 질의 인터페이스(`IExclusiveModeOpenQuery`, `IDayEndBlockQuery`, `IShortcutBlockQuery` 등)로 막습니다.
-- **2일차 이후 — 자유 목표** `TutorialObjectiveController`: 순서를 강제하지 않고 여러 목표를 동시에 추적합니다. 1일차부터 켜 두어 안내보다 먼저 해 버린 행동도 놓치지 않으며, 완료 판정은 이벤트로만 합니다.
-- 설계안에 있던 `TutorialDirector`는 **만들지 않기로** 판단했습니다 — 챕터 목록을 줄이면 기존 컨트롤러가 자연히 멈추고, 관문 해제는 러너의 `OnDisable`이 이미 처리하고 있었기 때문입니다 (`Docs/튜토리얼_재구성_구조_검토.md` §4)
-- 튜토리얼 진입점, 본게임 씬 전환 로딩·인계(`TutorialToGameHandoff`), 엔딩 컷씬 시퀀서
+- **1일차 — 강제 시퀀스** [`TutorialRunner`](Assets/Scripts/Tutorial/TutorialRunner.cs): 순서 진행과 완료 조건 감시만 담당하고 표시는 오버레이에 맡깁니다. 도는 동안 아직 설명하지 않은 창·단축키·HUD를 질의 인터페이스([`IExclusiveModeOpenQuery`](Assets/Scripts/UI/IExclusiveModeOpenQuery.cs), [`IDayEndBlockQuery`](Assets/Scripts/Managers/IDayEndBlockQuery.cs), [`IShortcutBlockQuery`](Assets/Scripts/UI/IShortcutBlockQuery.cs) 등)로 막습니다.
+- **2일차 이후 — 자유 목표** [`TutorialObjectiveController`](Assets/Scripts/Tutorial/TutorialObjectiveController.cs): 순서를 강제하지 않고 여러 목표를 동시에 추적합니다. 1일차부터 켜 두어 안내보다 먼저 해 버린 행동도 놓치지 않으며, 완료 판정은 이벤트로만 합니다.
+- 설계안에 있던 `TutorialDirector`는 **만들지 않기로** 판단했습니다 — 챕터 목록을 줄이면 기존 컨트롤러가 자연히 멈추고, 관문 해제는 러너의 `OnDisable`이 이미 처리하고 있었기 때문입니다 ([`Docs/튜토리얼_재구성_구조_검토.md`](Docs/튜토리얼_재구성_구조_검토.md) §4)
+- 튜토리얼 진입점, 본게임 씬 전환 로딩·인계([`TutorialToGameHandoff`](Assets/Scripts/Tutorial/TutorialToGameHandoff.cs)), 엔딩 컷씬 시퀀서
 
-### 8. 타워 · 몬스터 전투 이펙트와 효과음 — `ProjectileVisual` · `ProjectilePool` · `ProjectileImpactPlacement` · `AttackVfxAnchor` · `MonsterStatusVfx` (`Assets/Scripts/Combat`)
+### 8. 타워 · 몬스터 전투 이펙트와 효과음 — [`ProjectileVisual`](Assets/Scripts/Combat/ProjectileVisual.cs) · [`ProjectilePool`](Assets/Scripts/Combat/ProjectilePool.cs) · [`ProjectileImpactPlacement`](Assets/Scripts/Combat/ProjectileImpactPlacement.cs) · [`AttackVfxAnchor`](Assets/Scripts/Combat/AttackVfxAnchor.cs) · [`MonsterStatusVfx`](Assets/Scripts/Combat/Status/MonsterStatusVfx.cs) ([`Assets/Scripts/Combat`](Assets/Scripts/Combat))
 
-- `ProjectileVisual` — 발사·궤적·명중 연출을 `Projectile` 로직에서 분리. 궤적을 명중 시 떼어내지 않아 풀(`ProjectilePool`)이 온전한 오브젝트를 돌려받게 했습니다.
-- 속성별 발사체·명중 파티클, 근거리 투사체, 빙결·지속 피해 상태이상 이펙트(`MonsterStatusVfx`, 발밑 위치 캐싱), 버프 타워·새끼용 이펙트
+- [`ProjectileVisual`](Assets/Scripts/Combat/ProjectileVisual.cs) — 발사·궤적·명중 연출을 [`Projectile`](Assets/Scripts/Combat/Projectile.cs) 로직에서 분리. 궤적을 명중 시 떼어내지 않아 풀([`ProjectilePool`](Assets/Scripts/Combat/ProjectilePool.cs))이 온전한 오브젝트를 돌려받게 했습니다.
+- 속성별 발사체·명중 파티클, 근거리 투사체, 빙결·지속 피해 상태이상 이펙트([`MonsterStatusVfx`](Assets/Scripts/Combat/Status/MonsterStatusVfx.cs), 발밑 위치 캐싱), 버프 타워·새끼용 이펙트
 - 발사/명중 효과음 데이터 구조와 배선
 - 이 프로젝트의 정사영 2D 카메라에서 3D 파티클 에셋이 깨지는 원인과 해결, 만들었다가 **제거한** 근거리 트레이서의 기록까지 [`Docs/타워이펙트_작업노트.md`](Docs/타워이펙트_작업노트.md)에 정리했습니다.
 
 ### 9. 아트 · 에디터 작업
 
-- 벌목장·채석장·특화 생산시설 등 건물 스프라이트와 회전 에셋 (`Assets/Sprites/Buildings`)
-- Coplay MCP로 파티클·머티리얼·씬 배선을 처리한 일회성 에디터 스크립트 (`CoplayScripts`)
+- 벌목장·채석장·특화 생산시설 등 건물 스프라이트와 회전 에셋 ([`Assets/Sprites/Buildings`](Assets/Sprites/Buildings))
+- Coplay MCP로 파티클·머티리얼·씬 배선을 처리한 일회성 에디터 스크립트 ([`CoplayScripts`](CoplayScripts))
 
 ---
 
