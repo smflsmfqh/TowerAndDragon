@@ -61,14 +61,12 @@
 - [`GridMap`](Assets/Scripts/Grid/GridMap.cs) — 성 중심 좌표계, 셀 ↔ 청크 매핑, 풋프린트 단위 건설 가능 판정(`CanConstructBuildingFootprint`)
 - 초기 청크 분할과 성 중심 좌표 계산 — 프로토타입 시점의 9×9 정사각형 청크 기획을 구현하고, 맵 전체의 청크 분할을 확인하는 [`ChunkDebugger`](Assets/Scripts/ChunkDebugger.cs)를 만들었습니다 (이후 자유 형태 청크로의 전환은 다른 팀원 작업)
 - 지형 타일맵([`TerrainTileMap`](Assets/Scripts/Grid/TerrainTileMap.cs)/[`TerrainType`](Assets/Scripts/Grid/TerrainType.cs)), 마우스 타일 선택, 원정 마커 렌더러([`ExpeditionMarkerRenderer`](Assets/Scripts/Grid/ExpeditionMarkerRenderer.cs))
-- 세이브 복원 전용 배치 경로 — 복원 시 배치 판정을 **다시 묻지 않는** 이유가 [`GridMap.RestoreBuilding`](Assets/Scripts/Grid/GridMap.cs#L1007) 주석에 기록돼 있습니다 (얼음 새끼용 버프로 풀린 용암 지대가 복원 순서 때문에 건물을 조용히 지우던 문제)
 
 ### 2. 건물 배치 시스템 — [`BuildingPlacementController.cs`](Assets/Scripts/Grid/BuildingPlacementController.cs), [`Assets/Scripts/Buildings`](Assets/Scripts/Buildings)
 
 - 셀 사이즈·풋프린트([`FootprintShape`](Assets/Scripts/Buildings/FootprintShape.cs)) 기반 배치, 고스트 프리뷰, `R` 회전, 이동·철거(비용 회수)
 - 건설 비용을 빌딩 데이터에 귀속시키는 리팩터링
 - **건설 불가 사유 안내** — [`PlacementBlockReason`](Assets/Scripts/Grid/PlacementBlockReason.cs)은 가능/불가 판정을 두 번 구현하지 않고, 이미 실패한 배치에 "왜"만 되묻는 진단용 enum입니다. 값의 순서가 곧 안내 우선순위이며, 사유는 경고창 하나로 전달합니다.
-- 선택 상태 변경 이벤트를 **인자 없이** 발화하는 설계 — 구독자가 캐시 대신 매번 현재 상태를 읽게 해, 다섯 갈래로 갈리는 판정과 캐시가 어긋나 알림이 조용히 멈추는 일을 막았습니다 ([`BuildingPlacementController.InteractionStateChanged`](Assets/Scripts/Grid/BuildingPlacementController.cs#L118) 주석)
 
 ### 3. 점령 시스템 — [`Assets/Scripts/Conquest`](Assets/Scripts/Conquest)
 
