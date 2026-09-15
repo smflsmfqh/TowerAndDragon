@@ -40,8 +40,8 @@
 | 점령 모드: 접경 청크 하이라이트·보상 미리보기 | 점령 원정: 출격 마커와 남은 기간 |
 | ![튜토리얼 — 1일차 강제 시퀀스 오버레이](Docs/Images/readme/tutorial_overlay.jpg) | ![튜토리얼 — 새끼용 배치 안내](Docs/Images/readme/tutorial_babydragon.jpg) |
 | 튜토리얼: 1일차 강제 시퀀스 오버레이 | 튜토리얼: 새끼용 배치 안내 |
-| ![밤 전투 — 얼음 타워 명중 이펙트](Docs/Images/readme/night_combat_ice.jpg) | ![청크 디버거 — 자유 형태 청크 분할 시각화](Docs/Images/readme/chunk_debugger.jpg) |
-| 밤 전투: 얼음 타워 명중 이펙트 | 청크 디버거: 자유 형태 청크 분할 |
+| ![밤 전투 — 얼음 타워 명중 이펙트](Docs/Images/readme/night_combat_ice.jpg) | ![청크 디버거 — 맵 전체 청크 분할 확인용 디버그 뷰](Docs/Images/readme/chunk_debugger.jpg) |
+| 밤 전투: 얼음 타워 명중 이펙트 | 청크 디버거: 맵 전체 청크 분할 확인용 |
 
 - 자원 순환 구조: [`Docs/자원순환_플로우차트.svg`](Docs/자원순환_플로우차트.svg)
 
@@ -59,7 +59,7 @@
 타일맵 위에 셀 단위 데이터(`GridCell`)와 청크 단위 상태(`Chunk`)를 얹은 2계층 그리드. 건설·점령·자원·안개·몬스터 경로가 전부 이 위에서 동작합니다.
 
 - `GridMap` — 성 중심 좌표계, 셀 ↔ 청크 매핑, 풋프린트 단위 건설 가능 판정(`CanConstructBuildingFootprint`)
-- 자유 형태 청크에 맞춘 이웃 판정 분리 — **시야 확장**(변·꼭짓점 공유)과 **점령 출격**(변 공유만)을 다른 함수로 두고, 정사각형 반경 대신 "몇 단계 접경인가"로 주변을 정의
+- 초기 청크 분할과 성 중심 좌표 계산 — 프로토타입 시점의 9×9 정사각형 청크 기획을 구현하고, 맵 전체의 청크 분할을 확인하는 `ChunkDebugger`를 만들었습니다 (이후 자유 형태 청크로의 전환은 다른 팀원 작업)
 - 지형 타일맵(`TerrainTileMap`/`TerrainType`), 마우스 타일 선택, 원정 마커 렌더러(`ExpeditionMarkerRenderer`)
 - 세이브 복원 전용 배치 경로 — 복원 시 배치 판정을 **다시 묻지 않는** 이유가 `GridMap.cs`의 `RestoreBuilding` 주석에 기록돼 있습니다 (얼음 새끼용 버프로 풀린 용암 지대가 복원 순서 때문에 건물을 조용히 지우던 문제)
 
@@ -72,7 +72,7 @@
 
 ### 3. 점령 시스템 — `Assets/Scripts/Conquest`
 
-- 점령 모드 컨트롤러(`ConquestModeController`, 배타 모드 인터페이스 구현), 원정 상태(`ConquestExpedition`), 청크별 비용 테이블·기간 규칙 SO
+- 점령 모드 컨트롤러(`ConquestModeController`, 배타 모드 인터페이스 구현), 원정 상태(`ConquestExpedition`), 청크별 점령 비용 테이블(`ConquestChunkCostTable`)
 - 인구 코스트 연동, 접경하지 않은 청크 선택 방지, 자투리 점령지 정리와 하이라이트 방식 통일
 - 점령 UI ↔ 기능 연결
 
