@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-18 15:21:25Z" end-time="2026-09-18 15:21:32Z" duration="6.1375773">
+  <test-suite type="TestSuite" id="1000" name="TowerAndDragon" fullname="TowerAndDragon" runstate="Runnable" testcasecount="354" result="Passed" start-time="2026-09-18 15:21:25Z" end-time="2026-09-18 15:21:32Z" duration="6.137577" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1425" name="Assembly-CSharp-Editor.dll" fullname="/Users/ihaneul/unityProject/TowerAndDragon/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="354" result="Passed" start-time="2026-09-18 15:21:25Z" end-time="2026-09-18 15:21:32Z" duration="6.128378" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29342" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="1044" name="ConquestHighlightBeforeAfterBenchmark" fullname="ConquestHighlightBeforeAfterBenchmark" classname="ConquestHighlightBeforeAfterBenchmark" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-18 15:21:25Z" end-time="2026-09-18 15:21:32Z" duration="6.120749" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1045" name="A_PerFrameCost_CursorIdle" fullname="ConquestHighlightBeforeAfterBenchmark.A_PerFrameCost_CursorIdle" methodname="A_PerFrameCost_CursorIdle" classname="ConquestHighlightBeforeAfterBenchmark" runstate="Runnable" seed="1062899559" result="Passed" start-time="2026-09-18 15:21:25Z" end-time="2026-09-18 15:21:26Z" duration="0.196659" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[AB] 맵: 청크 41개 · 셀 4705개 · 대표 청크(중앙값) 셀 113개
+[AB] ① 커서 정지 프레임 1개 — 개선 전 72.29 µs · 출시본 0.09 µs · 837배
+[AB]    60fps 1초 환산 — 개선 전 4.34 ms/초 (프레임 예산의 0.43%) · 출시본 0.005 ms/초 (0.001%)
+]]></output>
+        </test-case>
+        <test-case id="1046" name="B_PerFrameCost_ChunkChanged" fullname="ConquestHighlightBeforeAfterBenchmark.B_PerFrameCost_ChunkChanged" methodname="B_PerFrameCost_ChunkChanged" classname="ConquestHighlightBeforeAfterBenchmark" runstate="Runnable" seed="688165983" result="Passed" start-time="2026-09-18 15:21:26Z" end-time="2026-09-18 15:21:26Z" duration="0.287692" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[AB] ② 청크가 바뀐 프레임 1개 — 개선 전 72.46 µs · 출시본 56.27 µs
+]]></output>
+        </test-case>
+        <test-case id="1047" name="C_GarbagePerFrame" fullname="ConquestHighlightBeforeAfterBenchmark.C_GarbagePerFrame" methodname="C_GarbagePerFrame" classname="ConquestHighlightBeforeAfterBenchmark" runstate="Runnable" seed="1248944016" result="Passed" start-time="2026-09-18 15:21:26Z" end-time="2026-09-18 15:21:30Z" duration="3.974254" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[AB] ③ 프레임당 가비지 — 개선 전 1987 B/프레임 (60fps 기준 116.4 KB/초)
+[AB]    출시본 · 가드 프레임 0 B (반복 2000회)
+[AB]    출시본 · 전환 프레임 864 B (반복 2000회)
+[AB]    ③의 경계 추적은 원본 ConqueredChunkBorderRenderer.TraceLoops()와 동일하게 폐곡선 목록(바깥 List)과 폐곡선마다의 List를 호출마다 새로 만든다. LineRenderer.SetPosition 등 엔진 호출의 네이티브 할당은 이 수치에 포함되지 않는다.
+]]></output>
+        </test-case>
+        <test-case id="1048" name="D_SixtySecondSession" fullname="ConquestHighlightBeforeAfterBenchmark.D_SixtySecondSession" methodname="D_SixtySecondSession" classname="ConquestHighlightBeforeAfterBenchmark" runstate="Runnable" seed="1647790834" result="Passed" start-time="2026-09-18 15:21:30Z" end-time="2026-09-18 15:21:31Z" duration="1.460971" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[AB] ④ 60초 세션 (3,600프레임) — 커서 궤적 셀 81칸
+[AB]    (타이머는 3,600프레임 루프 전체를 한 번만 감싼다 — 프레임당 Stopwatch 오버헤드가 출시본 수치에 섞이지 않도록)
+[AB]    커서 정지         — 재계산 횟수  3600 →    1회 (3600배 감소) · 누적 CPU   534.0 →   0.46 ms (1163.0배) · 누적 가비지    6413 KB → 출시본은 C_GarbagePerFrame의 전환 프레임 값 × 1회로 환산할 것
+[AB]    커서 초당 5칸      — 재계산 횟수  3600 →   34회 ( 106배 감소) · 누적 CPU   273.4 →   2.94 ms (  92.9배) · 누적 가비지    6413 KB → 출시본은 C_GarbagePerFrame의 전환 프레임 값 × 34회로 환산할 것
+[AB]    커서 초당 15칸     — 재계산 횟수  3600 →  100회 (  36배 감소) · 누적 CPU   311.9 →   7.30 ms (  42.7배) · 누적 가비지    6413 KB → 출시본은 C_GarbagePerFrame의 전환 프레임 값 × 100회로 환산할 것
+[AB]    커서 초당 40칸     — 재계산 횟수  3600 →  267회 (  13배 감소) · 누적 CPU   265.0 →  16.68 ms (  15.9배) · 누적 가비지    6413 KB → 출시본은 C_GarbagePerFrame의 전환 프레임 값 × 267회로 환산할 것
+]]></output>
+        </test-case>
+        <test-case id="1049" name="E_ScalabilityByProgress" fullname="ConquestHighlightBeforeAfterBenchmark.E_ScalabilityByProgress" methodname="E_ScalabilityByProgress" classname="ConquestHighlightBeforeAfterBenchmark" runstate="Runnable" seed="677637495" result="Passed" start-time="2026-09-18 15:21:31Z" end-time="2026-09-18 15:21:32Z" duration="0.185371" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[AB] ⑤ 판정 대상 청크 수별 — '영토 변화 1회'의 비용 (출시본은 이때만 실행)
+[AB]    대상 청크  1개(셀   75개): 0.012 ms/회 · 매 프레임이었다면 프레임 예산의 0.1%
+[AB]    대상 청크  4개(셀  304개): 0.049 ms/회 · 매 프레임이었다면 프레임 예산의 0.3%
+[AB]    대상 청크  8개(셀  639개): 0.113 ms/회 · 매 프레임이었다면 프레임 예산의 0.7%
+[AB]    대상 청크 16개(셀 1433개): 0.261 ms/회 · 매 프레임이었다면 프레임 예산의 1.6%
+[AB]    대상 청크 24개(셀 2327개): 0.448 ms/회 · 매 프레임이었다면 프레임 예산의 2.7%
+[AB]    대상 청크 32개(셀 3306개): 0.646 ms/회 · 매 프레임이었다면 프레임 예산의 3.9%
+[AB]    대상 청크 41개(셀 4705개): 0.948 ms/회 · 매 프레임이었다면 프레임 예산의 5.7%
+Saving results to: /Users/ihaneul/Library/Application Support/TowerAndDragon/TowerAndDragon/TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
