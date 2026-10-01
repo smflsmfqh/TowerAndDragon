@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "summary", "prior_findings", "findings"],
+  "properties": {
+    "verdict": {
+      "type": "string",
+      "enum": ["PASS", "REVISE"],
+      "description": "blocker/major 지적이 하나라도 남아 있으면 REVISE"
+    },
+    "summary": {
+      "type": "string",
+      "description": "이번 라운드 판단 요약 (한국어, 3문장 이내)"
+    },
+    "prior_findings": {
+      "type": "array",
+      "description": "직전 라운드까지의 지적 각각에 대한 재판정. 1라운드는 빈 배열",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "note"],
+        "properties": {
+          "id": { "type": "string" },
+          "status": { "type": "string", "enum": ["resolved", "unresolved", "withdrawn"] },
+          "note": { "type": "string", "description": "판정 근거. withdrawn은 반론을 받아들인 경우" }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "이번 라운드에 새로 발견한 지적만",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "category", "location", "problem", "evidence", "fix"],
+        "properties": {
+          "id": { "type": "string", "description": "R<라운드>-<번호>, 예: R1-3" },
+          "severity": { "type": "string", "enum": ["blocker", "major", "minor"] },
+          "category": {
+            "type": "string",
+            "enum": ["unmeasured-claim", "run-selection", "calc-error", "data-mismatch", "porting-fidelity", "scope-overclaim", "reproducibility", "method", "wording", "other"]
+          },
+          "location": { "type": "string", "description": "파일경로:줄 또는 파일경로#절" },
+          "problem": { "type": "string" },
+          "evidence": { "type": "string", "description": "직접 확인한 근거 (원자료 값, 명령 출력 등). 확인 못 했으면 그렇다고 적는다" },
+          "fix": { "type": "string" }
+        }
+      }
+    }
+  }
+}
