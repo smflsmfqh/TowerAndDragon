@@ -73,6 +73,7 @@
 - 점령 모드 컨트롤러([`ConquestModeController`](Assets/Scripts/Conquest/ConquestModeController.cs), 배타 모드 인터페이스 구현), 원정 상태([`ConquestExpedition`](Assets/Scripts/Conquest/ConquestExpedition.cs)), 청크별 점령 비용 테이블([`ConquestChunkCostTable`](Assets/Scripts/Conquest/ConquestChunkCostTable.cs))
 - 인구 코스트 연동, 접경하지 않은 청크 선택 방지, 자투리 점령지 정리와 하이라이트 방식 통일
 - 점령 UI ↔ 기능 연결
+- 커서 하이라이트를 "청크가 바뀔 때만 외곽선 재구성"으로 개선하고 Profiler로 측정 — [성능 측정](#성능-측정--점령-모드-하이라이트)
 
 ### 4. 자원 노드 시스템 — [`CellYieldOverrideTable`](Assets/Scripts/ResourceNode/CellYieldOverrideTable.cs) · [`ChunkYieldTable`](Assets/Scripts/ResourceNode/ChunkYieldTable.cs) · [`ResourceNodeAreaTable`](Assets/Scripts/ResourceNode/ResourceNodeAreaTable.cs) · [`ResourceProductionData`](Assets/Scripts/ResourceNode/ResourceProductionData.cs) ([`Assets/Scripts/ResourceNode`](Assets/Scripts/ResourceNode))
 
@@ -113,6 +114,71 @@
 
 ---
 
+## 성능 측정 — 점령 모드 하이라이트
+
+점령 모드의 커서 하이라이트는 커서가 멈춰 있어도 **매 프레임 청크의 모든 셀을 다시 칠하고** 있었습니다.
+이를 **가리키는 청크가 바뀔 때만 외곽선을 다시 그리도록** 바꾸고, 효과를 Unity Profiler로 측정했습니다.
+
+### 무엇을 비교했나
+
+| | S0 — 과거 구현 경로 | T1 — 현재 구현 |
+|---|---|---|
+| 출처 | 커밋 `038b253e`의 하이라이트 처리 경로를 현재 프로젝트에 **이식** | 커밋 `061cc138`의 실제 코드 |
+| 그리는 방식 | 커서 아래 청크의 모든 셀에 스프라이트 | 청크 덩어리의 외곽선만 |
+| 다시 그리는 시점 | 매 프레임 (변경 가드 없음) | 가리키는 청크가 바뀔 때만 |
+
+- 과거 커밋은 에셋·데이터 구조가 달라 그대로 실행할 수 없어, 처리 경로를 이식하고 호환 변경을 [호출별로 기록](bench/2026-09-23_playmode/호환범위.md)했습니다.
+- 같은 맵·같은 세이브·같은 가상 마우스 입력을 두 구현에 재생했습니다. 입력은 1,800프레임(60fps 기준 30초 분량) 동안 커서 **A 정지 · B 초당 5셀 · C 15셀 · D 40셀**입니다.
+- 환경: Unity 6000.3.15f1 **에디터 플레이모드**, MacBook Air(M1), 고정 카메라.
+
+### 수행한 테스트
+
+| 테스트 | 규모 | 확인한 것 |
+|---|---|---|
+| 파일럿·스모크·사전 확인 | 런 16개 (결과 표에는 넣지 않음) | 입력이 의도한 셀에 들어가는지, 두 구현이 섞이지 않는지, Profiler 원자료가 빠짐없이 저장되는지 |
+| 본 측정 A~D | S0/T1 × 4시나리오 × 3회 = 24런 | 재구성 횟수, 하이라이트 처리 누적 시간, 1회 비용, 전체 프레임 시간 |
+| 상태 변경 측정 (E) | 원정 출발·모드 재진입 각 10세션 | 상태가 바뀔 때 생기는 단발 비용 |
+| 보완 측정 | 10런 (원자료 보존) | 4회 합산 재현성, 구간별 메모리 할당, 대표 Profiler 화면 |
+| 계측 검증 | 54런 · 91,057 프레임 쌍 | 하네스 기록과 Profiler 원자료의 일치, 프레임 단위 대응 |
+| 집계 코드 검증 | 회귀 테스트 38개 · 결함 주입 11종 | 결과 표를 만드는 집계 스크립트의 정확성과 재현성 |
+
+### 결과
+
+| 지표 | S0 → T1 | 비고 |
+|---|---|---|
+| 재구성 횟수 (1,800프레임) | **1,800회 → 0 · 11 · 29 · 76회** | 3회 반복에서 값이 한 번도 흔들리지 않음 |
+| 하이라이트 처리 누적 시간 | **약 1.35~1.45초 → 0.036~0.073초 (19~38배)** | 시나리오별 3회 중앙값의 비. 커서가 빠를수록 배율이 줄어듦 |
+| 재구성 1회 비용 | 약 0.65~0.71 ms → 0.33~0.37 ms | 표시 방식이 달라 같은 작업의 비교는 아님 |
+| 구간 메모리 할당 총량 | 약 2.2~2.8 MB → 0~0.6 MB | 시나리오별 1런. **1회당 할당은 T1이 약 5배 많음** |
+| 전체 프레임 시간 | 약 44~46 ms 양쪽 비슷 | **일관된 향상을 확인하지 못함** (아래 한계) |
+| 상태 변경 시 청크 재분류 | 중앙값 약 33~38 ms | T1에만 있는 기능. 다음 개선 대상으로 남김 |
+
+측정 신뢰도: 입력 대응 유효 런 전부 100%(불일치 2런은 무효 처리 후 재측정), 하네스 ↔ Profiler 원자료 구간 합계 최대 차이 1.03%,
+프레임 쌍 91,057개에서 마커 발화 프레임 불일치 0건. 결과 표는 스크립트 한 번으로 다시 만들어지며 저장된 출력과 바이트 단위로 같습니다.
+
+### 한계
+
+- 개선을 확인한 것은 **하이라이트 처리 구간의 비용**이며 게임 전체 FPS가 아닙니다. 이 처리는 S0에서도 프레임 시간의 약 1.7~1.8%였고,
+  전체 프레임 시간에서는 런 간 변동과 구별되는 향상을 확인하지 못했습니다.
+- 에디터 플레이모드·이 장비·이 카메라에서의 값입니다. Windows 빌드에서는 재지 않았습니다.
+- T1은 "변경 가드"와 "외곽선 표시"가 함께 바뀐 결과이며, 각각의 기여는 분리하지 않았습니다.
+- 계측·하네스 자체의 오버헤드는 분리 측정하지 못했습니다.
+
+### 근거 자료
+
+| 자료 | 내용 |
+|---|---|
+| [`bench/README.md`](bench/README.md) | 수행한 테스트 17종의 결과와 코드·자료 위치, 재실행 명령 |
+| [`bench/2026-09-23_playmode/09_측정결과.md`](bench/2026-09-23_playmode/09_측정결과.md) | 측정 결과 원본 (조건·수치·무효 런·주장 가능 범위) |
+| [`bench/2026-09-23_playmode/12_결과분석_포트폴리오용.md`](bench/2026-09-23_playmode/12_결과분석_포트폴리오용.md) | 수치별 해설과 인용 시 단서 |
+| [`bench/2026-09-23_playmode/source/bench_harness/`](bench/2026-09-23_playmode/source/bench_harness) | 측정 하네스·S0 이식 드라이버·원자료 추출기 |
+| [`bench/summarize.py`](bench/summarize.py) · [`bench/test_summarize.py`](bench/test_summarize.py) | 집계기와 회귀 테스트 |
+| [`bench/2026-09-23_playmode/summary/`](bench/2026-09-23_playmode/summary) · [`screenshots/`](bench/2026-09-23_playmode/screenshots) | 런별 기록·집계 출력·검증 문서, 대표 Profiler 화면 |
+
+결과 표 재생성: `python3 bench/summarize.py bench/2026-09-23_playmode --group main` (테스트: `python3 -m unittest bench/test_summarize.py`)
+
+---
+
 ## 작업하면서 지킨 원칙
 
 팀 규칙([`CLAUDE.md`](CLAUDE.md))에 따라 지킨 것들입니다.
@@ -142,6 +208,7 @@ Unity 6000.3.15f1 · URP 17.3 · Input System · UniTask · DOTween
 | [`Docs/튜토리얼_재구성_구조_검토.md`](Docs/튜토리얼_재구성_구조_검토.md) | 튜토리얼 재설계 판단 기록 |
 | [`Docs/타워이펙트_작업노트.md`](Docs/타워이펙트_작업노트.md) | 전투 이펙트 배선과 겪은 함정 |
 | [`Docs/자원노드_시스템_설계.md`](Docs/자원노드_시스템_설계.md) | 자원 노드 설계 |
+| [`bench/README.md`](bench/README.md) | 점령 하이라이트 성능 측정 — 수행한 테스트·결과·재현 방법 |
 
 ## 팀
 
