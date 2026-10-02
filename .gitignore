@@ -174,3 +174,7 @@ Docs/빌드* 노트
 
 # bench Codex 검토 중 중단·한도로 실패한 시도 기록 (로컬에만 보존)
 /bench/**/failed_attempts/
+
+# 파이썬 실행 캐시 (bench 집계기·테스트 실행 시 자동 생성)
+__pycache__/
+*.pyc
