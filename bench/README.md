@@ -1,17 +1,79 @@
-# 재현 벤치마크 — 실행 방법
+# 점령 하이라이트 벤치마크
 
-> ## 현재 기준은 플레이모드 실측입니다
->
-> **결과: [2026-09-23_playmode/09_측정결과.md](2026-09-23_playmode/09_측정결과.md)**
-> 계획 [08_측정계획_가드×표시방식.md](08_측정계획_가드×표시방식.md) ·
-> 진행 [08_측정_마일스톤.md](08_측정_마일스톤.md)
->
-> 실제 게임을 플레이모드로 돌려 가상 입력을 재생하고 프로파일러 원자료까지 대조한 측정입니다.
-> 본 측정 44런 + 보완 10런, 재현 자료는 `2026-09-23_playmode/` 아래에 전부 있습니다.
-> 결과 표 재생성: `python3 bench/summarize.py bench/2026-09-23_playmode --group main|supplemental|all`
-> (그룹 정의 `2026-09-23_playmode/runs_manifest.json`, 회귀 테스트 `python3 -m unittest bench/test_summarize.py`).
->
-> **아래는 그보다 앞선 EditMode 벤치마크(2026-09-06)의 재현 안내이며 수치는 참고용입니다.**
+점령 모드 하이라이트의 **과거 경로(S0, `038b253e`에서 이식)** 와 **현재 구현(T1, `061cc138`)** 을
+같은 맵·같은 세이브·같은 가상 마우스 입력으로 비교한 측정이다.
+**현재 기준은 플레이모드 실측(2026-09-23 ~ 10-02)** 이고, 맨 아래 EditMode 벤치마크(2026-09-06)는 참고용 과거 기록이다.
+
+| 읽을 것 | 문서 |
+|---|---|
+| 결과 (수치·조건·한계의 원본) | [`2026-09-23_playmode/09_측정결과.md`](2026-09-23_playmode/09_측정결과.md) |
+| 결과 해설 (수치별 개선·한계, 포트폴리오 문장) | [`2026-09-23_playmode/12_결과분석_포트폴리오용.md`](2026-09-23_playmode/12_결과분석_포트폴리오용.md) |
+| 측정 계획 · 진행 기록 (M0~M8) | [`08_측정계획_가드×표시방식.md`](08_측정계획_가드×표시방식.md) · [`08_측정_마일스톤.md`](08_측정_마일스톤.md) |
+| 보완 작업 기록 (N0~N6) · 남은 한계 | [`2026-09-23_playmode/11_보완작업_마일스톤.md`](2026-09-23_playmode/11_보완작업_마일스톤.md) 「마무리 상태」 |
+
+아래 경로는 따로 적지 않으면 `bench/2026-09-23_playmode/` 기준이다.
+
+## 수행한 테스트와 결과
+
+측정 조건은 모두 Unity 6000.3.15f1 **에디터 플레이모드**, MacBook Air(M1), Game 뷰 1920×1080, 고정 카메라다.
+A~D 시나리오는 1,800프레임 동안 커서를 각각 정지 / 기준초당 5·15·40셀 움직인다.
+E 시나리오는 원정 출발(E-출발)과 점령 모드 재진입(E-재진입)을 180프레임 창에서 잰다.
+
+### 1. 측정 — 게임을 실제로 돌려 잰 것
+
+| # | 테스트 | 무엇을 확인했나 | 결과 | 자료 |
+|---|---|---|---|---|
+| 1 | **파일럿·스모크** (M3) | 측정 장치가 맞게 동작하는지 본다. 입력이 의도한 셀에 들어가는지, S0·T1이 서로 섞이지 않는지, raw 프레임 수, 계측 오버헤드 | 입력 대응 100%, 격리 통과, raw 프레임 전부 로드. 오버헤드는 런 간 변동에 묻혀 **분리 측정 불가** | `summary/pilot_*.json`·`smoke_*.json`, `screenshots/visual_*.png`, 08 마일스톤 「파일럿 결론」, 1차 결함본은 `superseded/` |
+| 2 | **본 측정 A~D** (M4) | S0/T1 × A~D × 3회, 24런. 재구성 횟수, 호버 처리 누적 시간, 재구성 1회 비용, 프레임 시간 | 재구성 **1,800회 → 0·11·29·76회**(전 칸 최소=최대). 누적 시간 **19.4~37.6배** 감소. 재구성 1회는 S0 651~713 µs, T1 334~372 µs. **전체 프레임 시간(약 44~46 ms)에서는 일관된 향상을 확인하지 못함** | 09 §4, `summary/summarize_output_main.md`, `csv/`, `csv_from_raw/`, `summary/<런>.json`, 실행 순서 `summary/run_order.md` |
+| 3 | **E 표본** (M5) | T1만 측정, E-출발·E-재진입 각 10세션. 상태가 바뀔 때의 단발 비용 (S0에는 이 기능이 없어 N/A) | 이벤트 구간 중앙값 `ConquerUI` 52.3 ms · `ModeEnter` 38.1 ms. 그중 청크 재분류 33.0 · 37.6 ms. 개선 수치가 아니라 남은 비용 | 09 §6, `summarize_output_main.md` 「E 표본」 |
+| 4 | **정산 동등성** (M6) | E-재진입 준비에 쓴 디버그 강제 완료가 정상 정산 경로와 같은 영토 상태를 만드는지 | **점령 관련 상태 완전 일치** (자원·인구·일차는 범위 밖) | `summary/settlement_equivalence.md`, `summary/settlement_state_{debug,normal}.txt` |
+| 5 | **보완 10런** | 본 측정과 같은 설정으로 A~D 8런과 E 2런을 더 돌린다. `.raw`를 보존해 아래 7·8의 원자료로 쓴다 | 4회 합산 배율 36.2 / 29.2 / 25.5 / 19.8배, **결론 불변** | `summarize_output_all.md`, `raw/`(Git 제외, 해시는 `raw_manifest.*`) |
+| 6 | **무효 런 판정** | 입력 대응·포인터 주입 관문에 걸린 런을 표에서 빼고 다시 측정 | 2건 무효(`S0_D_run3`, `T1_EReenter_run5`) → 재실행 후 유효. 무효본은 보존 | 09 §8, `summary/invalid_*.json`, `csv/invalid_*.csv` |
+| 7 | **구간별 GC** | 보완 런 raw에서 하이라이트 마커 구간의 관리 할당만 뽑는다. 전체 프레임 GC와 분리 | 구간 할당 총량 S0 2.19~2.79 MB → T1 0~0.60 MB. **1회당은 T1이 약 5배 많다**(D: 7,876 ↔ 1,552 B). **칸당 1런** | 09 §5, `summary/section_gc.md`, `summarize_output_supplemental.md` 「구간 GC」 |
+| 8 | **대표 Profiler 화면** (N6) | 보완 런 raw를 Profiler에 올려 대표 프레임 4장을 캡처 | S0/A 정지, T1/A 정지, T1/D 전환, E-재진입 스파이크 | `screenshots/profiler_*.png`, 캡션·읽을 때 주의 `screenshots/profiler_captions.md`, 캡처 스크립트 `summary/n6_capture/` |
+
+### 2. 계측 검증 — 잰 값을 믿어도 되는지
+
+| # | 테스트 | 무엇을 확인했나 | 결과 | 자료 |
+|---|---|---|---|---|
+| 9 | **하네스 ↔ Profiler raw 교차 검증** | 하네스가 기록한 마커 시간 합계와 raw 원자료 합계가 같은지 | 측정 창 기준 최대 상대차 **1.03%** (목표 ±5%) | 09 §7, `summary/cross_check.md`, `summarize_output_all.md` 「교차 검증」 |
+| 10 | **프레임 단위 대응** | 두 출처를 프레임마다 짝지어 발화 프레임과 오프셋이 맞는지 | 54런·91,057쌍, 오프셋 전부 +0, **발화 프레임 불일치 0건**. 판정선(±5% 또는 5,000 ns) 초과 1건, 원인 미상. 판정선은 사후에 정한 탐색적 기준 | 09 §7, `summary/frame_alignment.md`, `summarize_output_all.md` 「프레임 대응 요약」 |
+| 11 | **재구성 발생/미발생 분할** | 재구성 마커가 발화한 프레임과 발화하지 않은 프레임의 호버 시간을 나눠 본다 | T1 재구성 없는 프레임 19~22 µs (계측 오버헤드 포함 가능, 분리 못 함) | 09 §4 소표, `summary/transition_vs_still.md` |
+
+### 3. 집계 코드 검증 — 결과 표를 만드는 스크립트가 맞는지
+
+| # | 테스트 | 결과 | 실행 (저장소 루트) |
+|---|---|---|---|
+| 12 | **회귀 테스트** `bench/test_summarize.py` | 38개 통과 | `python3 -m unittest bench/test_summarize.py` |
+| 13 | **결함 주입** — 집계기 사본을 일부러 망가뜨려 테스트가 잡는지 본다 | 11개 중 10개 검출. `floor_float`는 결함이 아니라 같은 결과를 내는 변형이라 통과가 정상 | `python3 bench/2026-09-23_playmode/summary/n3_checks/inject_faults.py` |
+| 14 | **기존 문서 수치 재현** — 집계 이전에 손으로 만든 표를 집계기가 다시 만들어 내는지 | 09 §4 재구성 µs 14/14, `transition_vs_still.md` 22/22, `frame_alignment.md` 런별 54/54. "+1 63,792 ns" 한 값만 미재현 | `summary/n3_checks/check_alignment_vs_doc.py <summarize_output_all.md>`, `check_transition_rules.py`, `probe_alignment_sets.py` |
+| 15 | **출력 재현** — 집계 출력이 저장본과 같은지 | main·supplemental·all 3개 모두 바이트 일치. M8 당시 집계기(`source/history/M8/`)도 `summary/summarize_output.md`를 바이트 그대로 재현 | `python3 bench/summarize.py bench/2026-09-23_playmode --group main` (이하 `supplemental`·`all`) |
+| 16 | **보관 자료 해시** | 하네스·집계기·manifest·대조 스크립트·Profiler 화면 56파일 일치 | `cd bench/2026-09-23_playmode/source && shasum -a 256 -c source.sha256` |
+| 17 | **외부 검토** (Codex, 읽기 전용) | 보완 작업 N3~N6 PASS, 결과 해설 문서(12) PASS | `review/` 아래 폴더별 `round-N-request.md`·`round-N-review.json` |
+
+### 코드 위치
+
+| 코드 | 역할 |
+|---|---|
+| `source/bench_harness/Runtime/` | 측정 하네스. `ConquestHighlightProfileHarness`(입력 재생·기록), `LegacyConquestHighlightDriver`(S0 이식 경로), `BenchRecorders`(프레임별 ProfilerRecorder 값 기록)·`BenchOutputWriter`(측정 후 CSV·JSON 저장)·`BenchRunReport`(런 메타·유효성 판정) |
+| `source/bench_harness/Editor/` | 실행·추출 도구. `BenchLauncher`·`BenchBatchRunner`(런 설정·연속 실행), `ProfilerRawSummary`(`.raw` → `csv_from_raw/` 추출), `BenchProfilerCapture`(보존 `.raw`를 Profiler 창에 올리기), `BenchSettlementCheck`(정산 동등성), `BenchSnapshotAuthor`(세이브 스냅샷) |
+| `source/legacy_origin/` | S0의 출처인 `038b253e` 원본 6파일 (해시 `summary/origin_manifest.json`, 이식 범위 `호환범위.md`) |
+| `patches/` | 측정 중에만 적용한 계측 패치 3파일의 diff와 적용 전후 해시 |
+| `bench/summarize.py` | 집계기. 런 그룹은 `runs_manifest.json`(main 44 · supplemental 10 · all 54)이 정한다 |
+
+하네스와 계측 패치는 측정 후 `Assets/`에서 제거했다. 다시 측정하려면 [08 마일스톤 「다시 측정하려면」](08_측정_마일스톤.md#다시-측정하려면)을 따른다.
+
+### 결과를 인용할 때 같이 밝힐 한계
+
+- 에디터 플레이모드의 **해당 처리 구간** 비용이다. 게임 전체 FPS나 Windows 빌드 성능을 뜻하지 않는다.
+- S0는 과거 커밋을 그대로 실행한 것이 아니라 과거 경로를 현재 프로젝트에 **이식**한 것이다.
+- T1은 변경 가드와 외곽선 표시가 함께 바뀐 결과이며, 각각의 기여는 분리하지 않았다.
+- 구간 GC는 칸당 1런이다. 계측·하네스 오버헤드는 분리 측정하지 못했다.
+- 그 밖의 한계와 쓰면 안 되는 표현은 09 §9와 12 §5에 있다.
+
+---
+
+> **아래는 플레이모드 실측보다 앞선 EditMode 벤치마크(2026-09-06)의 재현 안내이며 수치는 참고용입니다.**
 > EditMode·배치모드에서 관리 코드만 잰 것이라 플레이모드 실측과 조건이 다릅니다. 섞어 인용하지 마세요.
 
 ---
