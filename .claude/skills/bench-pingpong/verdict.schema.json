@@ -1,7 +1,7 @@
 {
   "type": "object",
   "additionalProperties": false,
-  "required": ["verdict", "summary", "prior_findings", "findings"],
+  "required": ["verdict", "summary", "prior_findings", "findings", "decisions"],
   "properties": {
     "verdict": {
       "type": "string",
@@ -44,6 +44,23 @@
           "problem": { "type": "string" },
           "evidence": { "type": "string", "description": "직접 확인한 근거 (원자료 값, 명령 출력 등). 확인 못 했으면 그렇다고 적는다" },
           "fix": { "type": "string" }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "description": "요청서 「결정 요청」의 항목마다 하나. 결정 요청이 없으면 빈 배열",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "choice", "agrees_with_claude", "rationale", "conditions", "escalate_to_user"],
+        "properties": {
+          "id": { "type": "string", "description": "요청서의 결정 id 그대로 (예: 결정 6)" },
+          "choice": { "type": "string", "description": "고른 선택지 기호와 한 줄 요약. 새 선택지를 제안해도 된다" },
+          "agrees_with_claude": { "type": "boolean" },
+          "rationale": { "type": "string", "description": "직접 확인한 근거 포함" },
+          "conditions": { "type": "string", "description": "이 선택을 할 때 반드시 지킬 조건·각주·기록. 없으면 빈 문자열" },
+          "escalate_to_user": { "type": "boolean", "description": "둘이 정하면 안 되는 결정이라고 판단하면 true (이유는 rationale에)" }
         }
       }
     }

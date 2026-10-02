@@ -11,12 +11,14 @@
 #   round-N-events.jsonl    Codex 이벤트 원본
 #   round-N-codex.log       Codex stderr
 #
-# 환경 변수: BENCH_REVIEW_MAX_ROUNDS (기본 3), BENCH_REVIEW_EFFORT (기본 high)
+# 환경 변수: BENCH_REVIEW_MAX_ROUNDS (기본 3), BENCH_REVIEW_MODEL (기본 gpt-6.1-sol), BENCH_REVIEW_EFFORT (기본 high)
+#   모델을 지정하지 않으면 ~/.codex/config.toml 기본 모델(astra)에 high가 붙는다 - 사용자가 원하는 조합은 sol high다.
 set -euo pipefail
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SKILL_DIR/../../.." && pwd)"
 MAX_ROUNDS="${BENCH_REVIEW_MAX_ROUNDS:-3}"
+MODEL="${BENCH_REVIEW_MODEL:-gpt-6.1-sol}"
 EFFORT="${BENCH_REVIEW_EFFORT:-high}"
 
 if [[ $# -ne 1 ]]; then
@@ -50,7 +52,7 @@ if [[ -e "$OUT" ]]; then
 fi
 
 common=(--json --output-schema "$SKILL_DIR/verdict.schema.json" -o "$OUT"
-        -c "model_reasoning_effort=\"$EFFORT\"")
+        -c "model=\"$MODEL\"" -c "model_reasoning_effort=\"$EFFORT\"")
 
 if (( round == 1 )); then
   {
@@ -90,6 +92,9 @@ python3 - "$OUT" <<'PY'
 import json, sys
 d = json.load(open(sys.argv[1], encoding="utf-8"))
 print(f"verdict={d['verdict']} new={len(d['findings'])} "
-      f"unresolved={sum(p['status'] == 'unresolved' for p in d['prior_findings'])}")
+      f"unresolved={sum(p['status'] == 'unresolved' for p in d['prior_findings'])} "
+      f"decisions={len(d['decisions'])} "
+      f"disagree={sum(not x['agrees_with_claude'] for x in d['decisions'])} "
+      f"escalate={sum(x['escalate_to_user'] for x in d['decisions'])}")
 PY
 echo "review: $OUT"
