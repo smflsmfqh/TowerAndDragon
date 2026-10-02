@@ -1,0 +1,28 @@
+{
+  "verdict": "PASS",
+  "summary": "1라운드 지적 4건이 모두 해결됐다. 새 해시 목록은 56개 항목 모두 검증됐고, 새 지적은 없다.",
+  "prior_findings": [
+    {
+      "id": "R1-1",
+      "status": "resolved",
+      "note": "section_gc.md:96이 잔여 할당을 마커 밖 관측값으로 한정하고 할당처를 특정할 수 없다고 명시한다."
+    },
+    {
+      "id": "R1-2",
+      "status": "resolved",
+      "note": "representative_frames.md:76~79가 이벤트 마커의 발화 프레임만 서술하고, 후속 렌더링 작업의 지연 여부는 판정하지 않는다고 명시한다."
+    },
+    {
+      "id": "R1-3",
+      "status": "resolved",
+      "note": "frame_alignment.md:28의 옛 수치는 취소선과 ‘현재 재현 불가’ 표시가 붙었고, 29행에 현행 값 125→24,001 ns가 제시돼 있다."
+    },
+    {
+      "id": "R1-4",
+      "status": "resolved",
+      "note": "source.sha256의 56개 항목이 모두 검증됐다. 이전 48개 항목은 보존됐으며, 새 목록에는 캡처 스크립트 3개·화면 4개·캡션이 추가됐다."
+    }
+  ],
+  "findings": [],
+  "decisions": []
+}

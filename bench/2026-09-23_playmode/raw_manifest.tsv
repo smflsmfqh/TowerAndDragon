@@ -1,0 +1,16 @@
+# raw 보관 manifest — 2026-09-29 작성 (11_보완작업_마일스톤.md N1)
+# raw 본체(.raw)는 Git에 없다. 루트 .gitignore의 /bench/2026-09-23_playmode/raw/ 로 제외되며 이 PC 로컬에만 있다.
+# 외부 백업 없음(2026-09-29 사용자 결정) — 이 PC 디스크가 손상되면 복구할 수 없다.
+# 대상은 보완 10런뿐이다. 본 측정 44런과 무효 2런의 raw는 추출 후 삭제·덮어쓰기돼 없다(10_보완작업_인계.md 「복구할 수 없는 과거 증거」).
+# 검증: 이 디렉터리(bench/2026-09-23_playmode)에서 shasum -a 256 -c raw_manifest.sha256
+file	bytes	sha256	mtime_utc	run_key	group
+raw/S0_A_run4.raw	1269844832	94413464d1962a5adeb8e2da11b2274a791df218fc1b91ec53152a0cda6d8f91	2026-09-24T13:59:59Z	S0_A_run4	supplemental
+raw/S0_B_run4.raw	1272419083	bb87df69a366c186d774c3d29def1c75a91d5df0fee938cfc5f363f4560979db	2026-09-24T14:06:11Z	S0_B_run4	supplemental
+raw/S0_C_run4.raw	1272875259	20a2524775963b7043379bef56afade9df9462b6f92254225f8deec24b2afa05	2026-09-24T14:08:15Z	S0_C_run4	supplemental
+raw/S0_D_run4.raw	1274766632	6c0de4b8bebf310b64f8408725ff3f9e42c1245d47a7d724c5cb8b684a492780	2026-09-24T14:14:31Z	S0_D_run4	supplemental
+raw/T1_A_run4.raw	1254234199	90fa00fa4e61ded473cc80987f2e4d4b1fcc0eda490444e9ea5dd132be73f1cd	2026-09-24T14:02:01Z	T1_A_run4	supplemental
+raw/T1_B_run4.raw	1254258007	e44436f6d96e00a4f855746d105408e48ddbe378362d7d91a23d0d2adad60faf	2026-09-24T14:04:06Z	T1_B_run4	supplemental
+raw/T1_C_run4.raw	1254722148	020c4fd4514734ec4b43a44fc65c514cc834858835d8622ee29add5246077fc2	2026-09-24T14:10:20Z	T1_C_run4	supplemental
+raw/T1_D_run4.raw	1254823821	260644ed7da53a467ab136ed928d3e4974c98bb48ae9ae453f2612030126e2c4	2026-09-24T14:12:25Z	T1_D_run4	supplemental
+raw/T1_EDepart_run11.raw	130177119	d229d68bfaac834aa4e2c62b5b614c2f38d7e1332940d825c72314f9c2843e8f	2026-09-24T14:15:18Z	T1_EDepart_run11	supplemental
+raw/T1_EReenter_run11.raw	129531341	4b4ea1eb2c15474b0d8755a184715d6c73bf62a4f00c96c33bb4d9376d89b9ab	2026-09-24T14:16:00Z	T1_EReenter_run11	supplemental

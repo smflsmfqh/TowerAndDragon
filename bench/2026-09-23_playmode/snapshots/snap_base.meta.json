@@ -1,0 +1,61 @@
+{
+  "SchemaVersion": 2,
+  "GameVersion": "1.0.0",
+  "SavedAtUtc": "2026-09-23T09:37:36.753168+00:00",
+  "SlotIndex": 2,
+  "IsAutoSave": false,
+  "DayNumber": 1,
+  "CycleNumber": 1,
+  "DragonType": 4,
+  "DifficultyScore": 0,
+  "Resources": [
+    {
+      "Type": 1,
+      "Amount": 5350
+    },
+    {
+      "Type": 2,
+      "Amount": 5350
+    },
+    {
+      "Type": 4,
+      "Amount": 5350
+    },
+    {
+      "Type": 8,
+      "Amount": 5000
+    },
+    {
+      "Type": 16,
+      "Amount": 5000
+    },
+    {
+      "Type": 32,
+      "Amount": 5000
+    },
+    {
+      "Type": 64,
+      "Amount": 5000
+    },
+    {
+      "Type": 128,
+      "Amount": 5000
+    },
+    {
+      "Type": 256,
+      "Amount": 5000
+    },
+    {
+      "Type": 512,
+      "Amount": 5000
+    },
+    {
+      "Type": 1024,
+      "Amount": 5000
+    },
+    {
+      "Type": 2048,
+      "Amount": 5000
+    }
+  ]
+}

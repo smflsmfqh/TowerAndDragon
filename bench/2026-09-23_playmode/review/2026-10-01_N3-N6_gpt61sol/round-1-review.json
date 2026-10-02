@@ -1,0 +1,44 @@
+{
+  "verdict": "REVISE",
+  "summary": "주요 성능 수치는 독립 CSV 재계산과 일치했고, 세 그룹·M8 출력의 바이트 재현, 보관 해시 56개, Profiler 화면 4장을 확인했다. 회귀 테스트 38개와 결함 주입도 파일 쓰기를 메모리로 대체해 확인했다. 다만 할당 원인 단정과 E 시나리오의 조건·이벤트 시점 설명에 수정이 필요하다.",
+  "prior_findings": [],
+  "findings": [
+    {
+      "id": "R1-1",
+      "severity": "major",
+      "category": "unmeasured-claim",
+      "location": "bench/2026-09-23_playmode/summary/section_gc.md:63; bench/2026-09-23_playmode/09_측정결과.md:166",
+      "problem": "S0에서 관측한 할당 전부를 GetChunkCellCoords의 new List로 확정하고, 두 마커 사이에 그 코드만 있다고 설명한다. 실제 계측 범위에는 다른 호출과 순회도 포함되며, 개별 할당처를 분리한 측정은 없다.",
+      "evidence": "보관 LegacyConquestHighlightDriver.cs:121~163에서 s0_hover는 입력 조회·청크 조회·CanSendExpedition·GetChunkCellCoords를 포함하고, s0_rebuild는 HighlightCells 안에서 시작한다. GetChunkCellCoords:172~180에는 List 생성 외에 IReadOnlyList 순회도 있다. 기준 커밋과 차이가 없는 ConquestManager.cs:199~205는 GetBorderingChunks를 순회하며, GridMap.cs:874~884에는 yield 열거 경로가 있다. CSV 재계산으로 확인한 것은 s0_hover의 할당과 s0_rebuild의 0 B이며, List만의 할당량은 확인하지 못했다.",
+      "fix": "두 문서에서 확정 범위를 's0_hover 안·s0_rebuild 밖에서 관측된 할당'으로 제한한다. List 생성·좌표 복사·판정 및 열거 경로는 코드상 포함된 작업으로 설명하고, 개별 할당처의 비중은 분리하지 않았다고 명시한다. 회당 관측 수치는 유지한다."
+    },
+    {
+      "id": "R1-2",
+      "severity": "major",
+      "category": "data-mismatch",
+      "location": "bench/2026-09-23_playmode/09_측정결과.md:30",
+      "problem": "전체 측정 환경 표에 카메라 위치와 줌을 하나만 제시하지만, E-재진입은 다른 조건에서 측정됐다. 현재 표와 '이 카메라 프레이밍'이라는 설명만 읽으면 E에도 같은 값이 적용된 것으로 받아들이게 된다.",
+      "evidence": "유효 54런의 summary JSON을 직접 묶어 확인했다. A~D와 E-출발은 위치 (8.878, -3.483, -10.000), 줌 5.906이다. E-재진입 11런 전부는 위치 (-9.372, 5.267, -10.000), 줌 6.163이며, T1_EReenter_run1.json:45~46에도 기록돼 있다. 스냅샷 슬롯도 A~D는 2, E-출발은 3, E-재진입은 4다.",
+      "fix": "환경 표의 카메라·초기 상태를 시나리오별로 구분하고 각 슬롯과 카메라 값을 적는다. 동일 조건 비교라는 설명은 S0/T1의 같은 시나리오 비교 및 본 측정/보완의 같은 시나리오 비교에 적용된다는 점을 명시한다."
+    },
+    {
+      "id": "R1-3",
+      "severity": "major",
+      "category": "data-mismatch",
+      "location": "bench/2026-09-23_playmode/09_측정결과.md:179",
+      "problem": "E 두 유형의 전이를 모두 30프레임째라고 설명하지만, E-출발에서 비용 표의 대상인 출발 콜백은 frame_index 39에 실행된다. 패널 열기 시작, 실제 출발 이벤트, 완료 영토 준비, 모드 재진입의 시점이 구분되지 않는다.",
+      "evidence": "본 측정·보완 E CSV 22개를 직접 확인했다. E-출발 11런의 t1_conquerui_calls는 모두 frame_index 39에서만 양수이고, E-재진입 11런의 t1_modeenter_calls는 모두 30에서만 양수다. 보관 하네스:1106~1110의 frame_index 30은 패널 열기 시작이다. 또한 :165→187, :1250~1264, :806~812의 호출 순서상 E-재진입의 영토 변경 전후 기록은 측정 밖 준비 단계에서 얻고, 완료 영토에서 모드를 켜 워밍업한 뒤 다시 끈다.",
+      "fix": "frame_index 기준으로 E-출발은 '30에서 패널 열기 시작, 39에서 ConquerUI 발화', E-재진입은 '30에서 ModeEnter 발화'라고 구분한다. 상태 전이 검증 수치는 E-재진입의 측정 밖 완료 상태 준비에 해당한다고 적고, 완료 영토에서 240프레임 워밍업 후 재진입한 비용이라는 조건도 §6에 추가한다. 비용 수치와 원자료는 유지한다."
+    },
+    {
+      "id": "R1-4",
+      "severity": "minor",
+      "category": "unmeasured-claim",
+      "location": "bench/2026-09-23_playmode/09_측정결과.md:258",
+      "problem": "무효 런 두 건의 원인을 에디터 포커스 유실로 확정하고, 추가 관문이 그 실패 모드를 직접 검증한 것처럼 설명한다. 보존된 관문은 포인터 주입 불일치를 검출하며 포커스 자체를 검사하지 않는다. 입력 불일치에 따른 제외 근거에는 영향이 없다.",
+      "evidence": "ConquestHighlightProfileHarness.cs:1004~1031을 직접 확인했다. 주입 좌표와 읽힌 좌표가 다르면 '에디터가 앞에 있지 않았다'라는 메시지를 붙이며, 해당 함수에는 포커스 조회가 없다. 두 무효 summary JSON에는 입력 불일치가 기록돼 있지만 독립적인 포커스 상태 기록은 없다. 역사적 작업 로그에서도 포인터 고정·프레임 시간 변화로 원인을 해석하고 있어, 두 런의 포커스 유실을 독립적으로 확인하지 못했다.",
+      "fix": "확정된 무효 사유는 입력 대응·포인터 주입 불일치로 적고, 포커스 유실은 관찰된 실패 모드에 근거한 추정으로 표시한다. ValidatePointerInjection은 원인 판별이 아니라 증상 검출 관문이라고 설명한다."
+    }
+  ],
+  "decisions": []
+}

@@ -1,0 +1,56 @@
+# N0 시작 상태 기록 — 2026-09-29 15:02:02 KST
+# 11_보완작업_마일스톤.md N0. N1의 .gitignore 한 줄 추가 이후 시점이다.
+
+## HEAD
+061cc138722714ecaf76ca2d3fb4467481701545
+Sat Sep 19 01:55:48 2026 +0900 Merge branch 'master' of https://github.com/smflsmfqh/TowerAndDragon
+
+## git status --short
+ M .gitignore
+ D Assets/Imported.meta
+ M Assets/TowerAndDragon_Imported
+ M bench/README.md
+?? "Assets/_Recovery/0 (5).unity"
+?? "Assets/_Recovery/0 (5).unity.meta"
+?? bench/08_측정_마일스톤.md
+?? bench/08_측정계획_가드×표시방식.md
+?? bench/2026-09-23_playmode/
+?? bench/summarize.py
+
+## 계측 대상 3파일 ↔ patches/pre_instrumentation (DIFF 줄이 없으면 일치)
+SAME Assets/Scripts/Conquest/ConquestModeController.cs
+SAME Assets/Scripts/Grid/ConqueredChunkBorderRenderer.cs
+SAME Assets/Scripts/UI/UI_ConquestWindow.cs
+
+## source/source.sha256 재검증
+OK 39
+
+## bench/summarize.py ↔ source/summarize.py
+SAME
+d0e9cb0ac1b66f7eb66f0a4455cc5916a51e9fdc392bf51732aeca75007da022  bench/summarize.py
+
+## raw/
+-rw-r--r--  1 ihaneul  staff  1269844832  9 24 22:59 S0_A_run4.raw
+-rw-r--r--  1 ihaneul  staff  1272419083  9 24 23:06 S0_B_run4.raw
+-rw-r--r--  1 ihaneul  staff  1272875259  9 24 23:08 S0_C_run4.raw
+-rw-r--r--  1 ihaneul  staff  1274766632  9 24 23:14 S0_D_run4.raw
+-rw-r--r--  1 ihaneul  staff  1254234199  9 24 23:02 T1_A_run4.raw
+-rw-r--r--  1 ihaneul  staff  1254258007  9 24 23:04 T1_B_run4.raw
+-rw-r--r--  1 ihaneul  staff  1254722148  9 24 23:10 T1_C_run4.raw
+-rw-r--r--  1 ihaneul  staff  1254823821  9 24 23:12 T1_D_run4.raw
+-rw-r--r--  1 ihaneul  staff   130177119  9 24 23:15 T1_EDepart_run11.raw
+-rw-r--r--  1 ihaneul  staff   129531341  9 24 23:16 T1_EReenter_run11.raw
+files: 10  bytes: 10367652441
+
+## 제외 규칙 (bench 관련)
+[.gitignore]
+173:/bench/2026-09-23_playmode/raw/
+[.git/info/exclude 주석 외]
+(없음)
+
+## Assets/Bench
+(없음)
+
+## 인계서(2026-09-29) 대비 차이
+- .gitignore M: N1에서 추가한 raw 제외 규칙(이번 작업).
+- Assets/_Recovery/0 (5).unity(+meta) untracked: 인계서 이후 Unity가 만든 복구 씬으로 보임. 건드리지 않음.

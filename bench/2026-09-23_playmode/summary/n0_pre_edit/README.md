@@ -7,9 +7,7 @@
 > 진행 [08_측정_마일스톤.md](08_측정_마일스톤.md)
 >
 > 실제 게임을 플레이모드로 돌려 가상 입력을 재생하고 프로파일러 원자료까지 대조한 측정입니다.
-> 본 측정 44런 + 보완 10런, 재현 자료는 `2026-09-23_playmode/` 아래에 전부 있습니다.
-> 결과 표 재생성: `python3 bench/summarize.py bench/2026-09-23_playmode --group main|supplemental|all`
-> (그룹 정의 `2026-09-23_playmode/runs_manifest.json`, 회귀 테스트 `python3 -m unittest bench/test_summarize.py`).
+> 본 측정 44런 + 검증용 10런, 재현 자료는 `2026-09-23_playmode/` 아래에 전부 있습니다.
 >
 > **아래는 그보다 앞선 EditMode 벤치마크(2026-09-06)의 재현 안내이며 수치는 참고용입니다.**
 > EditMode·배치모드에서 관리 코드만 잰 것이라 플레이모드 실측과 조건이 다릅니다. 섞어 인용하지 마세요.

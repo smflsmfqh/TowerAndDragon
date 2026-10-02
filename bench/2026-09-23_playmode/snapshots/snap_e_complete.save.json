@@ -1,0 +1,250 @@
+{
+  "Meta": {
+    "SchemaVersion": 2,
+    "GameVersion": "1.0.0",
+    "SavedAtUtc": "2026-09-23T09:40:00.561224+00:00",
+    "SlotIndex": 4,
+    "IsAutoSave": false,
+    "DayNumber": 1,
+    "CycleNumber": 1,
+    "DragonType": 4,
+    "DifficultyScore": 0,
+    "Resources": [
+      {
+        "Type": 1,
+        "Amount": 5350
+      },
+      {
+        "Type": 2,
+        "Amount": 5350
+      },
+      {
+        "Type": 4,
+        "Amount": 5350
+      },
+      {
+        "Type": 8,
+        "Amount": 5000
+      },
+      {
+        "Type": 16,
+        "Amount": 5000
+      },
+      {
+        "Type": 32,
+        "Amount": 5000
+      },
+      {
+        "Type": 64,
+        "Amount": 5000
+      },
+      {
+        "Type": 128,
+        "Amount": 5000
+      },
+      {
+        "Type": 256,
+        "Amount": 5000
+      },
+      {
+        "Type": 512,
+        "Amount": 5000
+      },
+      {
+        "Type": 1024,
+        "Amount": 5000
+      },
+      {
+        "Type": 2048,
+        "Amount": 5000
+      }
+    ]
+  },
+  "Run": {
+    "CurrentCycle": 1,
+    "CyclePhase": 0,
+    "DragonType": 4,
+    "BabyDragons": [],
+    "DragonEggs": [
+      {
+        "DragonType": 4,
+        "FedDayCount": 0
+      }
+    ],
+    "BossDragonEggRewards": [],
+    "Mutators": [],
+    "TypeChangeCycleNumber": 0,
+    "TypeChangeCountInCycle": 0
+  },
+  "Resources": {
+    "Amounts": [
+      {
+        "Type": 1,
+        "Amount": 5350
+      },
+      {
+        "Type": 2,
+        "Amount": 5350
+      },
+      {
+        "Type": 4,
+        "Amount": 5350
+      },
+      {
+        "Type": 8,
+        "Amount": 5000
+      },
+      {
+        "Type": 16,
+        "Amount": 5000
+      },
+      {
+        "Type": 32,
+        "Amount": 5000
+      },
+      {
+        "Type": 64,
+        "Amount": 5000
+      },
+      {
+        "Type": 128,
+        "Amount": 5000
+      },
+      {
+        "Type": 256,
+        "Amount": 5000
+      },
+      {
+        "Type": 512,
+        "Amount": 5000
+      },
+      {
+        "Type": 1024,
+        "Amount": 5000
+      },
+      {
+        "Type": 2048,
+        "Amount": 5000
+      }
+    ]
+  },
+  "Population": {
+    "MaxPopulation": 70
+  },
+  "Research": {
+    "UnlockedNodeIds": [],
+    "ResearchPoints": 0
+  },
+  "DragonTree": {
+    "UnlockedNodeIds": [],
+    "ResearchPoints": 0
+  },
+  "Conquest": {
+    "ActiveExpeditions": [
+      {
+        "TargetChunkCoord": {
+          "X": 0,
+          "Y": -2
+        },
+        "Cost": {
+          "Population": 8,
+          "Food": 10,
+          "Wood": 30,
+          "Stone": 30
+        },
+        "DaysRequired": 2,
+        "DaysProgressed": 0
+      }
+    ]
+  },
+  "Map": {
+    "VisibleChunks": [
+      {
+        "X": 0,
+        "Y": -2
+      },
+      {
+        "X": -1,
+        "Y": -2
+      },
+      {
+        "X": 1,
+        "Y": -2
+      },
+      {
+        "X": -2,
+        "Y": -1
+      },
+      {
+        "X": 2,
+        "Y": -1
+      },
+      {
+        "X": -2,
+        "Y": 0
+      },
+      {
+        "X": 2,
+        "Y": 0
+      },
+      {
+        "X": -2,
+        "Y": 1
+      },
+      {
+        "X": 2,
+        "Y": 1
+      },
+      {
+        "X": -1,
+        "Y": 2
+      },
+      {
+        "X": 1,
+        "Y": 2
+      },
+      {
+        "X": 0,
+        "Y": 2
+      }
+    ],
+    "ConqueredChunks": [
+      {
+        "X": 0,
+        "Y": -1
+      },
+      {
+        "X": -1,
+        "Y": 0
+      },
+      {
+        "X": 1,
+        "Y": 0
+      },
+      {
+        "X": 0,
+        "Y": 0
+      },
+      {
+        "X": 0,
+        "Y": 1
+      }
+    ],
+    "EnhancedChunks": [],
+    "Buildings": []
+  },
+  "Castle": {
+    "CurrentHealth": 100.0
+  },
+  "Landmarks": {
+    "ClaimedLandmarkIds": [],
+    "Operations": []
+  },
+  "GuideQuests": {
+    "CompletedQuestIds": [
+      "complete_conquest",
+      "first_expedition"
+    ],
+    "IsIntroAnswered": false
+  }
+}

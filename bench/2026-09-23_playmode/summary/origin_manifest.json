@@ -1,0 +1,36 @@
+{
+  "legacy_commit": "038b253eaf6e657a99bc0955f9693f801a04e51c",
+  "current_commit": "061cc138722714ecaf76ca2d3fb4467481701545",
+  "files": [
+    {
+      "source": "Assets/Scripts/Conquest/ConquestModeController.cs",
+      "sha256": "093a5d083f0413136fbc47f5a95cc8b5c12e3ade0979e0a627490e69d869ccc0",
+      "output": "bench/2026-09-23_playmode/source/legacy_origin/Conquest/ConquestModeController.cs"
+    },
+    {
+      "source": "Assets/Scripts/MouseSelectController.cs",
+      "sha256": "8cbac6878a0458449967bf3e75c46da1bbe04578177d2f19c6d060cac430eef0",
+      "output": "bench/2026-09-23_playmode/source/legacy_origin/MouseSelectController.cs"
+    },
+    {
+      "source": "Assets/Scripts/Grid/ComponentPool.cs",
+      "sha256": "d63b601a04b5fde41974c3361312a108007efd55d1207cc878a95dee38186b7a",
+      "output": "bench/2026-09-23_playmode/source/legacy_origin/Grid/ComponentPool.cs"
+    },
+    {
+      "source": "Assets/Scripts/Grid/GridMap.cs",
+      "sha256": "92a8aeef1aa4b70bb86ab944d76410dec4c776557bdc1e64f8625478b6ae3096",
+      "output": "bench/2026-09-23_playmode/source/legacy_origin/Grid/GridMap.cs"
+    },
+    {
+      "source": "Assets/Scripts/Grid/Chunk.cs",
+      "sha256": "9c035f4d50ae22157a92eae4443b68a55c09ad91f6b9572e721f1a9c564b5fe5",
+      "output": "bench/2026-09-23_playmode/source/legacy_origin/Grid/Chunk.cs"
+    },
+    {
+      "source": "Assets/Scripts/Managers/ConquestManager.cs",
+      "sha256": "31f556a64e74cecf94757338b4efc5d60693f65eacadcf8a01f84861f31013cd",
+      "output": "bench/2026-09-23_playmode/source/legacy_origin/Managers/ConquestManager.cs"
+    }
+  ]
+}

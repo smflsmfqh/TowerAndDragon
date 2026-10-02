@@ -1,0 +1,44 @@
+{
+  "verdict": "REVISE",
+  "summary": "집계 출력은 현재 코드로, M8 출력은 보관 코드로 각각 바이트 단위 재현됐다. 네 Profiler 화면의 선택 프레임·마커·GC 값도 원자료와 일치했다. 다만 상세 문서 두 곳이 계측 범위를 넘어 원인과 후속 렌더링 작업의 부재를 단정해 수정이 필요하다.",
+  "prior_findings": [],
+  "findings": [
+    {
+      "id": "R1-1",
+      "severity": "major",
+      "category": "scope-overclaim",
+      "location": "bench/2026-09-23_playmode/summary/section_gc.md:96",
+      "problem": "마커 밖의 할당 38 MB 이상을 측정과 무관한 배경 시스템 몫으로 확정했다. 계측으로 확인한 것은 마커 밖에서 발생했다는 사실뿐이다.",
+      "evidence": "같은 문서 95행은 전체 프레임 GC 40 MB대와 구간 GC 0~2.8 MB를 제시한다. 09_측정결과.md 164~165행은 같은 잔여를 ‘해당 마커 밖에서 관측한 할당’으로만 설명한다.",
+      "fix": "96행을 ‘나머지 38 MB 이상은 해당 마커 밖에서 관측됐으며, 이 측정으로 할당처를 특정할 수 없다’로 고친다."
+    },
+    {
+      "id": "R1-2",
+      "severity": "major",
+      "category": "scope-overclaim",
+      "location": "bench/2026-09-23_playmode/summary/representative_frames.md:76",
+      "problem": "이벤트 마커가 후속 프레임에서 0이라는 관측으로 지연된 렌더링 작업도 없었다고 결론 냈다. 렌더링 후속 작업은 해당 마커로 분리 측정하지 않았다.",
+      "evidence": "같은 문서 65~69행에서 이벤트 구간은 frame_index 30에 44,260.4 µs이고 31~34에서는 0이다. 그러나 전체 프레임 시간은 이어서 66.86·59.29·68.73·67.27 ms이며 Batches도 8267에서 8300으로 변한다. 이 값들만으로 렌더링 작업의 지연 여부는 판정할 수 없다.",
+      "fix": "‘계측한 이벤트 마커는 frame_index 30에서만 발화했고 31~34에서는 발화하지 않았다’까지만 적고, 지연된 렌더링 작업이 없다는 문장은 삭제하거나 별도 측정 근거를 붙인다."
+    },
+    {
+      "id": "R1-3",
+      "severity": "minor",
+      "category": "wording",
+      "location": "bench/2026-09-23_playmode/summary/frame_alignment.md:28",
+      "problem": "재현되지 않은 ‘166 → 63,792 ns, 380배’가 현재형 본문 문장으로 남아 있다. 바로 다음 줄의 날짜 메모가 정정하지만, 28행만 인용하면 틀린 수치가 된다.",
+      "evidence": "29행은 두 값이 재현되지 않았다고 명시한다. summarize_output_all.md 「오프셋별」은 +0 125 ns, +1 24,001 ns로 출력한다.",
+      "fix": "원문은 보존하되 28행 앞에 ‘당시 서술·현재 재현 불가’라는 표지를 붙이거나 취소선으로 표시해, 29행의 정정값이 현행 수치임을 분명히 한다."
+    },
+    {
+      "id": "R1-4",
+      "severity": "minor",
+      "category": "reproducibility",
+      "location": "bench/2026-09-23_playmode/source/source.sha256:1",
+      "problem": "N6 화면을 다시 여는 데 사용한 스크립트 두 개가 보존돼 있으나 현재 해시 목록에는 없다.",
+      "evidence": "source.sha256 48항목 검증은 모두 통과했다. 목록에는 summary/n6_capture/N6Show.cs와 N6FrameCount.cs가 없고, 11_보완작업_마일스톤.md 685행도 누락을 기록한다. 화면 파일 네 개의 해시는 profiler_captions.md와 일치했다.",
+      "fix": "다음 해시 목록 갱신 때 두 캡처 스크립트를 포함하고, 현재 목록은 history에 보존한다."
+    }
+  ],
+  "decisions": []
+}

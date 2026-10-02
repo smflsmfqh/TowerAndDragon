@@ -1,0 +1,28 @@
+# N6 시작 직전 상태 (2026-10-01 20:16)
+## git rev-parse HEAD
+afd4ffa5e25cd5dd10b8a44776a9963793b61580
+## git status --short
+ M .claude/skills/bench-pingpong/SKILL.md
+ M .claude/skills/bench-pingpong/codex_review.sh
+ M .claude/skills/bench-pingpong/review_prompt.md
+ M .claude/skills/bench-pingpong/verdict.schema.json
+ D Assets/Imported.meta
+ M Assets/TowerAndDragon_Imported
+ M bench/README.md
+?? bench/08_측정_마일스톤.md
+?? bench/08_측정계획_가드×표시방식.md
+?? bench/2026-09-23_playmode/
+?? bench/summarize.py
+?? bench/test_summarize.py
+## .git/info/exclude
+# git ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+# For a project mostly in C, the following would be a good set of
+# exclude patterns (uncomment them if you want to use them):
+# *.[oa]
+# *~
+## ls Assets/Bench
+ls: Assets/Bench: No such file or directory
+
+## HEAD 차이 (N0 기준 061cc138 → afd4ffa5)
+- 커밋 1개(afd4ffa5, 사용자): .claude/skills/bench-pingpong/ 4파일 + .gitignore. `git diff --stat 061cc138 HEAD -- Assets/` 비어 있음 → 게임 코드는 기준 커밋과 같다. N6는 보존 raw만 읽으므로 영향 없음.
