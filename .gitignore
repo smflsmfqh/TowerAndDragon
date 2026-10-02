@@ -171,3 +171,6 @@ Docs/빌드* 노트
 
 # 점령 하이라이트 실측 보완 런 .raw (런당 약 1.2 GB, 로컬에만 보존. 추출본·문서는 추적 대상)
 /bench/2026-09-23_playmode/raw/
+
+# bench Codex 검토 중 중단·한도로 실패한 시도 기록 (로컬에만 보존)
+/bench/**/failed_attempts/
